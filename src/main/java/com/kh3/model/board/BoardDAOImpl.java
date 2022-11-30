@@ -27,20 +27,17 @@ public class BoardDAOImpl implements BoardDAO {
 	        map.put("keyword", keyword);
 	        map.put("bbs_id", bbs_id);
 
-	   return this.sqlSession.selectOne("sitebbsTotal", map);
+	   return this.sqlSession.selectOne("SiteBoardTotal", map);
 		
 	}
 
 	@Override
-	public List<BoardDTO> getBoardList(int startNo, int endNo, String field, String keyword,String bbs_id) {
-		 Map<String, Object> map = new HashMap<String, Object>();
-	        map.put("startNo", startNo);
-	        map.put("endNo", endNo);
-	        map.put("field", field);
-	        map.put("keyword", keyword);
-	        map.put("bbs_id", bbs_id);
-
-	        return this.sqlSession.selectList("sitebbsList", map);
+	public List<BoardDTO> getBoardList(int startNo, int endNo, Map<String, Object> map) {
+		
+		map.put("startNo", startNo);
+		map.put("endNo", endNo);
+	   
+		return this.sqlSession.selectList("SiteBoardList", map);
 	}
 
 

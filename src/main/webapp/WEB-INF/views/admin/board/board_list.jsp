@@ -64,7 +64,7 @@
                                         <div class="col-auto my-1"><b>글쓰기 </b>(${level_write})</div>
                                     </div>
                                 </td>
-                                <td><a href="<%=request.getContextPath()%>/board/board_list.do?bbs_id=${dto.getBoard_id()}" class="btn btn-outline-info btn-sm"><i class="fa fa-link"></i> 게시판 보기</a></td>
+                                <td><a href="<%=request.getContextPath()%>/site/board/board_list.do?bbs_id=${dto.getBoard_id()}" class="btn btn-outline-info btn-sm"><i class="fa fa-link"></i> 게시판 보기</a></td>
                                 <td>
                                     <a href="<%=request.getContextPath()%>/admin/board/board_modify.do?board_no=${dto.getBoard_no()}" class="btn btn-outline-success btn-sm mr-1">수정</a>
                                     <a href="<%=request.getContextPath()%>/admin/board/board_delete.do?board_no=${dto.getBoard_no()}" class="btn btn-outline-danger btn-sm" onclick="return confirm('정말 삭제하시겠습니까?\n되돌릴 수 없습니다.');">삭제</a>

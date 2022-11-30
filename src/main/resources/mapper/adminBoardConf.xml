@@ -123,7 +123,10 @@
 		drop table board_data_${board_id}
 	</update>
 
-
+	
+	<select id="adminBoardConfRowCount" parameterType="String" resultType="boardConfDTO">
+		select * from board_config where board_id = #{bbs_id}
+	</select>
 
 
 

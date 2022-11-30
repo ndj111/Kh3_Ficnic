@@ -73,4 +73,11 @@ public class BoardConfDAOImpl implements BoardConfDAO {
         return sqlSession.delete("adminBoardConfdel", board_no);
     }
 
+
+	@Override
+	public BoardConfDTO getBoardCont(String bbs_id) {
+		
+		return sqlSession.selectOne("adminBoardConfRowCount", bbs_id);
+	}
+
 }
