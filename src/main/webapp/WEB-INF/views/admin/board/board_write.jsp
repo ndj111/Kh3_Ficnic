@@ -1,14 +1,18 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-   
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
-</head>
-<body>
+<%@ include file="../layout/layout_header.jsp" %>
+
+
+<div class="page-info row mb-3">
+    <div class="d-flex align-items-center justify-content-between">
+        <h2>게시판 목록</h2>
+        <ol class="m-0 p-2">
+            <li>게시판 관리</li>
+            <li><b>게시판 목록</b></li>
+        </ol>
+    </div>
+</div>
+<div class="page-cont">
 	<c:set var="m" value="${modify}"/>
 	<c:if test="${!empty m }">
 		<c:set var="tag" value="/admin/board/board_modify_ok.do"/>
@@ -184,5 +188,5 @@
 	</div>
 		
 	</form>
-</body>
-</html>
+</div>
+<%@ include file="../layout/layout_footer.jsp" %>

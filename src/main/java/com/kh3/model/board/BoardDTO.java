@@ -25,7 +25,7 @@ public class BoardDTO {
 	private String bdata_use_notice;
 	private String bdata_use_secret;
 	
-	private int bdata_use_hit;
+	private int bdata_hit;
 	private int bdata_comment;
 	private String bdata_writer_id;
 	private String bdata_writer_pw;

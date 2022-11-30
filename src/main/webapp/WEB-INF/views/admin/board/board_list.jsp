@@ -1,13 +1,19 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
-</head>
+<%@ include file="../layout/layout_header.jsp" %>
+
+
+<div class="page-info row mb-3">
+    <div class="d-flex align-items-center justify-content-between">
+        <h2>게시판 목록</h2>
+        <ol class="m-0 p-2">
+            <li>게시판 관리</li>
+            <li><b>게시판 목록</b></li>
+        </ol>
+    </div>
+</div>
 <body>
+<div class="page-cont">
 	<div align="center">
 		<h5>총 ${List.size() }개의 게시판</h5>
 		<table border="1" cellspacing="0">
@@ -20,7 +26,6 @@
 				<th>기능</th>
 			</tr>
 			<c:choose>
-				
 				<c:when test="${!empty List}">
 					<c:forEach items="${List }" var="dto">
 						<tr>
@@ -72,11 +77,9 @@
                     <c:when test="${!empty field}"><a href="<%=request.getContextPath()%>/admin/board/board_list.do" class="btn btn-outline-secondary"><i class="fa fa-list mr-1"></i> 게시물 전체목록</a></c:when>
                     <c:otherwise><a href="<%=request.getContextPath()%>/admin/board//board_write.do" class="btn btn-primary"><i class="fa fa-pencil mr-1"></i> 새로운 글쓰기</a></c:otherwise>
                     </c:choose>
-                </div>
-				
+                </div>			
 	</div>
-	
-		
-	
-</body>
-</html>
+</div>
+
+
+<%@ include file="../layout/layout_footer.jsp" %>

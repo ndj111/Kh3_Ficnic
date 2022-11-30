@@ -14,6 +14,54 @@
 
 
 
+	<!-- 페이징 처리 -->
+<select id="sitebbsTotal" parameterType="java.util.Map" resultType="int">
+        select count(*) from board_data_${bbs_id}
+        <choose>
+            <when test="field.equals('title') and keyword != ''">where bdata_title like '%' || #{keyword} || '%'</when>
+            <when test="field.equals('cont') and keyword != ''">where bdata_cont like '%' || #{keyword} || '%'</when>
+            <when test="field.equals('writer') and keyword != ''">where bdata_writer like '%' || #{keyword} || '%'</when>
+        </choose>
+    </select>
+
+
+    <select id="sitebbsList" parameterType="java.util.Map" resultType="boardDto">
+        <choose>
+            <when test="field.equals('title') and keyword != ''">
+		        <![CDATA[
+		            select * from
+		                (select row_number() over(order by board_no desc) rnum, b.* from board_data_${bbs_id} b where bdata_title like '%' || #{keyword} || '%')
+		                where rnum >= #{startNo} and rnum <= #{endNo}
+		        ]]>
+            </when>
+
+            <when test="field.equals('cont') and keyword != ''">
+                <![CDATA[
+                    select * from
+                        (select row_number() over(order by board_no desc) rnum, b.* from board_data_${bbs_id} b where bdata_cont like '%' || #{keyword} || '%')
+                        where rnum >= #{startNo} and rnum <= #{endNo}
+                ]]>
+            </when>
+
+            <when test="field.equals('writer') and keyword != ''">
+                <![CDATA[
+                    select * from
+                        (select row_number() over(order by board_no desc) rnum, b.* from board_data_${bbs_id} b where bdata_writer like '%' || #{keyword} || '%')
+                        where rnum >= #{startNo} and rnum <= #{endNo}
+                ]]>
+            </when>
+
+            <otherwise>
+                <![CDATA[
+                    select * from
+                        (select row_number() over(order by board_no desc) rnum, b.* from board_data_${bbs_id} b)
+                        where rnum >= #{startNo} and rnum <= #{endNo}
+                ]]>
+            </otherwise>
+        </choose>
+    </select>
+
+
 
 
 

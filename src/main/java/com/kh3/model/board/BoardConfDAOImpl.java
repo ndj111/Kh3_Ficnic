@@ -62,7 +62,7 @@ public class BoardConfDAOImpl implements BoardConfDAO {
 		 Map<String, Object> map = new HashMap<String, Object>();
 	        map.put("field", field);
 	        map.put("keyword", keyword);
-
+	        map.put("", map);
 	        return this.sqlSession.selectOne("bbsTotal", map);
 	
 	}

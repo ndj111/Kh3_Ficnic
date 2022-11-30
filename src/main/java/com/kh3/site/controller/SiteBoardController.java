@@ -59,7 +59,8 @@ public class SiteBoardController {
         }else{
             page = 1;
         }
-        totalRecord = this.board_ConfDao.getListCount(field, keyword);
+        
+        totalRecord = this.board_Dao.getListCount(field, keyword,bbs_id);
         
         PageDTO dto = new PageDTO(page, rowsize, totalRecord, field, keyword);
         
@@ -67,8 +68,7 @@ public class SiteBoardController {
         String pageUrl = request.getContextPath()+"site/board/board_list.do?field="+field+"&keyword="+keyword;
 
         model.addAttribute("List", this.board_Dao.getBoardList(bbs_id));
-        
-        
+          
     	model.addAttribute("totalCount", totalRecord);
         model.addAttribute("paging", dto);
         model.addAttribute("field", field);
