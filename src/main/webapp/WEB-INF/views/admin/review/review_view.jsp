@@ -1,17 +1,22 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-
+<%@ include file="../layout/layout_header.jsp" %>
 
 <c:set var="dto" value="${dto}" />
 
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
-</head>
-<body>
+<div class="page-info row mb-3">
+    <div class="d-flex align-items-center justify-content-between">
+        <h2>게시판 목록</h2>
+        <ol class="m-0 p-2">
+            <li>게시판 관리</li>
+            <li><b>게시판 목록</b></li>
+        </ol>
+    </div>
+</div>
+
+
+<div class="page-cont">
+
 
  <div style="width: 600px; margin: 50px auto; text-align: center;">
         <hr color="green" />
@@ -73,6 +78,14 @@
     <!-- 버튼 //END -->
     
     </div>
+
+</div>
+
+
+<%@ include file="../layout/layout_footer.jsp" %>
+
+
+
 
 
 </body>

@@ -24,7 +24,7 @@ public class AdminReviewController {
     private ReviewDAO dao;
 	
 
-	@RequestMapping("admin/review_list.do")
+	@RequestMapping("admin/review/review_list.do")
 	public String list(Model model) {
 		
 		List<ReviewDTO> list = this.dao.getReviewList();
@@ -37,7 +37,7 @@ public class AdminReviewController {
 }
 	
 	
-	@RequestMapping("admin/review_view.do")
+	@RequestMapping("admin/review/review_view.do")
 	public String view(Model model ,@RequestParam("no") int no) {
 		
 		ReviewDTO dto = this.dao.reviewView(no);
@@ -50,7 +50,7 @@ public class AdminReviewController {
 	
 	
 	
-	@RequestMapping("admin/review_modify.do")
+	@RequestMapping("admin/review/review_modify.do")
 	public String update(@RequestParam("no") int no, Model model) {
 		
 
@@ -66,7 +66,7 @@ public class AdminReviewController {
 	}
 
 		
-	@RequestMapping("admin/review_modify_ok.do")
+	@RequestMapping("admin/review/review_modify_ok.do")
 	public void updateOk(ReviewDTO dto, HttpServletResponse response) throws Exception {
 		
 		int check = this.dao.reviewModify(dto);
@@ -90,7 +90,7 @@ public class AdminReviewController {
 	}
 	
 	
-	@RequestMapping("admin/review_delete.do")
+	@RequestMapping("admin/review/review_delete.do")
 	public void delete(@RequestParam("no") int no, 
 			HttpServletResponse response) throws Exception {
 		
@@ -119,18 +119,6 @@ public class AdminReviewController {
 		
 	}
 
-	/*
-	 * @Autowired private Upload upload;
-	 * 
-	 * 
-	 * @RequestMapping("upload.do") public String upload() { return "uploadForm"; }
-	 * 
-	 * @RequestMapping("upload_ok.do") public String uploadOk(Model model,
-	 * MultipartHttpServletRequest mRequest) { if(upload.fileUpload(mRequest)) {
-	 * model.addAttribute("result", "파일 업로드 성공"); }else {
-	 * model.addAttribute("result", "파일 업로드 실패"); } return "upload_result"; }
-	 */
-	
 
 	}
 	

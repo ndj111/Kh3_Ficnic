@@ -301,7 +301,7 @@ body {
 }
 #header .navbar .nav-link {
     position: relative;
-    padding: 1rem 1.9rem;
+    padding: 1rem 1.2rem;
     font-size: 16px;
     color: hsla(0,0%,100%,.75);
     letter-spacing: -0.5px;
@@ -1327,7 +1327,7 @@ main .table-list tbody .eng,
 main .card .col a.eng {
     font-family: 'verdana';
     font-weight: 500;
-    letter-spacing: -1px;
+    letter-spacing: 0;
 }
 main .table-list tfoot td {
     padding: 10px 0;
@@ -1361,6 +1361,11 @@ main .table-list.hover > tbody > tr:hover > td {
 }
 
 
+main .list-search-form .input-group-prepend .input-group-text {
+    border-top-left-radius: .25rem!important;
+    border-bottom-left-radius: .25rem!important;
+    overflow: hidden;
+}
 
 @media (max-width: 992px) {
     main .list-search-form .input-group-prepend {
@@ -1433,7 +1438,6 @@ main .table-list.hover > tbody > tr:hover > td {
 .page-paging span.nolink {
     width: 38px;
     height: 38px;
-    padding-top: 13px;
     text-align: center;
 }
 .page-paging a {
@@ -1447,7 +1451,6 @@ main .table-list.hover > tbody > tr:hover > td {
 .page-paging span a {
     width: 38px;
     height: 38px;
-    padding-top: 13px;
     font-size: 16px;
 }
 .page-paging a:hover {

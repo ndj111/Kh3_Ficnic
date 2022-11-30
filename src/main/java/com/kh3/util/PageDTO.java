@@ -1,5 +1,7 @@
 package com.kh3.util;
 
+import java.util.Map;
+
 import lombok.Data;
 
 // 페이징 처리시 작업 할 내용을 설정하는 개체
@@ -18,8 +20,7 @@ public class PageDTO {
     private int block = 3;     // 아래에 보여질 최대 페이지 수
 
     // 검색 관련 멤버 선언
-    private String field;
-    private String keyword;
+    private Map<String, Object> map = null;
 
 
 
@@ -28,12 +29,11 @@ public class PageDTO {
 
 
     // 검색 페이징 처리 인자 생성자
-    public PageDTO(int page, int rowsize, int totalRecord, String field, String keyword) {
+    public PageDTO(int page, int rowsize, int totalRecord, Map<String, Object> map) {
         this.page = page;
         this.rowsize = rowsize;
         this.totalRecord = totalRecord;
-        this.field = field;
-        this.keyword = keyword;
+        this.map = map;
 
         // 해당 페이지에서 시작 글 번호
         this.startNo = (this.page * this.rowsize) - (this.rowsize - 1);

@@ -7,107 +7,25 @@
 <!-- 관리자 : 게시판 설정 관련 -->
 <mapper namespace="boardConfDAO">
 
-    <!-- 게시판 설정 목록 -->
-    <select id="adminBoardConfList" resultType="boardConfDTO">
-    	select * from board_config
-    </select>
-    
-    <insert id="adminBoardConfCount" parameterType="boardConfDTO">
-		insert into board_config values( (select max(board_no) from board_config )+1,#{board_id},#{board_name},#{board_skin},#{board_list_num},#{board_page_num},#{board_use_category},#{board_use_comment},#{board_use_secret},#{board_use_only_secret},#{board_use_link1},#{board_use_link2},#{board_use_file1},#{board_use_file2},#{board_use_file3},#{board_use_file4},#{board_level_list},#{board_level_view},#{board_level_write},#{board_level_comment},#{board_level_notice},#{board_level_modify},#{board_level_delete},sysdate)	
-    </insert>
-    
-    
-    <insert id="adminBoardConfCategory" parameterType="boardConfDTO" >
-    	create table board_category_${board_id}(
-			    bcate_no number(5) primary key,
-			    bcate_name varchar2(50) not null,
-			    bcate_rank number(5) default '99' not null,
-			    bcate_article number(11) default '0' not null,
-			    bcate_date date default sysdate
-		)
-    </insert>
-    <insert id="adminBoardConfComment" parameterType="boardConfDTO" >
-		    create table board_comment_${board_id}(
-			    bcomm_no number(5) primary key,
-			    bdata_no number(5) not null,
-			    bcomm_id varchar2(50),
-			    bcomm_pw varchar2(50),
-			    bcomm_name varchar2(100),
-			    bcomm_cont varchar2(2000),
-			    bcomm_date date default sysdate
-			)
-    </insert>
-    
-    <insert id="adminBoardConfData" parameterType="boardConfDTO">
-   			 create table board_data_${board_id}(
-				    bdata_no number(5) primary key,
-				    board_id varchar2(30) not null,
-				    bdata_headnum number(10) default '0' not null,
-				    bdata_category number(5) default '0' not null,
-				    bdata_title varchar2(200) not null,
-				    bdata_cont varchar2(3000) not null,
-				    bdata_sub varchar2(200),
-				    bdata_link1 varchar2(300),
-				    bdata_link2 varchar2(300),
-				    bdata_file1 varchar2(300),
-				    bdata_file2 varchar2(300),
-				    bdata_file3 varchar2(300),
-				    bdata_file4 varchar2(300),
-				    bdata_ficnic varchar2(1000),
-				    bdata_use_notice varchar2(1) default 'N' not null,
-				    bdata_use_secret varchar2(1) default 'N' not null,
-				    bdata_hit number(5) default '0' not null,
-				    bdata_comment number(5) default '0' not null,
-				    bdata_writer_id varchar2(50) not null,
-				    bdata_writer_pw varchar2(50) not null,
-				    bdata_writer_name varchar2(50) not null,
-				    bdata_date date default sysdate
-				)
-    </insert>
-
-	<select id="adminBoardConfCon" parameterType="int" resultType="boardConfDTO">
-		select * from board_config where board_no=#{board_no}
-	</select>
-	
-	<update id="adminBoardUpdate" parameterType="boardConfDTO">
-		update board_config set board_id = #{board_id}, board_skin = #{board_skin}, board_list_num = #{board_list_num}, board_page_num = #{board_page_num}, board_use_category=#{board_use_category}, board_use_comment=#{board_use_comment}, board_use_secret =#{board_use_secret}, board_use_only_secret =#{board_use_only_secret}, board_use_link1=#{board_use_link1}, board_use_link2=#{board_use_link2},  board_use_file1=#{ board_use_file1},  board_use_file2=#{ board_use_file2},  board_use_file3=#{ board_use_file3},  board_use_file4=#{ board_use_file4}, board_level_list=#{board_level_list}, board_level_view=#{board_level_view}, board_level_write=#{board_level_write}, board_level_comment=#{board_level_comment}, board_level_notice=#{board_level_notice}, board_level_modify =#{board_level_modify }, board_level_delete=#{board_level_delete}, board_date = sysdate where board_no = #{board_no}
-	</update>
-	
-	
-	<delete id="adminBoardConfdel" parameterType="int">
-		delete from board_config where board_no = #{board_no}
-	</delete>
-	
-	<update id="adminBoardConfdelCategory" parameterType="boardConfDTO">
-		drop table board_category_${board_id}
-	</update>
-	<update id="adminBoardConfdelComment" parameterType="boardConfDTO">
-		drop table board_comment_${board_id}
-	</update>
-	<update id="adminBoardConfdelData" parameterType="boardConfDTO">
-		drop table board_data_${board_id}
-	</update>
-	
-	
-	<!-- 페이징 처리 -->
-	    <select id="bbsTotal" parameterType="java.util.Map" resultType="int">
+    <!-- 게시판 설정 목록 총 갯수 -->
+    <select id="adminBoardConfTotal" parameterType="java.util.Map" resultType="int">
         select count(*) from board_config
         <choose>
-            <when test="field.equals('board_name') and keyword != ''"> where board_name like '%' || #{keyword} || '%'</when>
+            <when test="keyword != ''"> where board_name like '%' || #{keyword} || '%'</when>
         </choose>
     </select>
 
 
-    <select id="bbsList" parameterType="java.util.Map" resultType="boardConfDTO">
+    <!-- 게시판 설정 목록 -->
+    <select id="adminBoardConfList" parameterType="java.util.Map" resultType="boardConfDTO">
         <choose>
-            <when test="field.equals('board_name') and keyword != ''">
-		        <![CDATA[
-		            select * from
-		                (select row_number() over(order by board_no desc) rnum, b.* from board_config b where board_name like '%' || #{keyword} || '%')
-		                where rnum >= #{startNo} and rnum <= #{endNo}
-		        ]]>
+            <when test="keyword != ''">
+                <![CDATA[
+                    select * from
+                        (select row_number() over(order by board_no desc) rnum, b.* from board_config b where board_name like '%' || #{keyword} || '%')
+                        where rnum >= #{startNo} and rnum <= #{endNo}
+                ]]>
             </when>
-
 
             <otherwise>
                 <![CDATA[
@@ -118,6 +36,95 @@
             </otherwise>
         </choose>
     </select>
+
+
+
+    <!-- 게시판 설정 게시판 추가하기 -->
+    <insert id="adminBoardConfWrite" parameterType="boardConfDTO">
+        insert into board_config values( (select max(board_no) from board_config )+1,#{board_id},#{board_name},#{board_skin},#{board_list_num},#{board_page_num},#{board_use_category},#{board_use_comment},#{board_use_secret},#{board_use_only_secret},#{board_use_link1},#{board_use_link2},#{board_use_file1},#{board_use_file2},#{board_use_file3},#{board_use_file4},#{board_level_list},#{board_level_view},#{board_level_write},#{board_level_comment},#{board_level_notice},#{board_level_modify},#{board_level_delete},sysdate)	
+    </insert>
+
+    <insert id="adminBoardConfCategory" parameterType="boardConfDTO" >
+        create table board_category_${board_id}(
+			bcate_no number(5) primary key,
+			bcate_name varchar2(50) not null,
+			bcate_rank number(5) default '99' not null,
+			bcate_article number(11) default '0' not null,
+			bcate_date date default sysdate
+        )
+    </insert>
+
+    <insert id="adminBoardConfComment" parameterType="boardConfDTO" >
+        create table board_comment_${board_id}(
+			bcomm_no number(5) primary key,
+			bdata_no number(5) not null,
+			bcomm_id varchar2(50),
+			bcomm_pw varchar2(50),
+			bcomm_name varchar2(100),
+			bcomm_cont varchar2(2000),
+			bcomm_date date default sysdate
+        )
+    </insert>
+    
+    <insert id="adminBoardConfData" parameterType="boardConfDTO">
+        create table board_data_${board_id}(
+			bdata_no number(5) primary key,
+			board_id varchar2(30) not null,
+			bdata_headnum number(10) default '0' not null,
+			bdata_category number(5) default '0' not null,
+			bdata_title varchar2(200) not null,
+			bdata_cont varchar2(3000) not null,
+			bdata_sub varchar2(200),
+			bdata_link1 varchar2(300),
+			bdata_link2 varchar2(300),
+			bdata_file1 varchar2(300),
+			bdata_file2 varchar2(300),
+			bdata_file3 varchar2(300),
+			bdata_file4 varchar2(300),
+			bdata_ficnic varchar2(1000),
+			bdata_use_notice varchar2(1) default 'N' not null,
+			bdata_use_secret varchar2(1) default 'N' not null,
+			bdata_hit number(5) default '0' not null,
+			bdata_comment number(5) default '0' not null,
+			bdata_writer_id varchar2(50) not null,
+			bdata_writer_pw varchar2(50) not null,
+			bdata_writer_name varchar2(50) not null,
+			bdata_date date default sysdate
+        )
+    </insert>
+
+
+    <!-- 게시판 설정 내용 가져오기 -->
+	<select id="adminBoardConfCon" parameterType="int" resultType="boardConfDTO">
+		select * from board_config where board_no=#{board_no}
+	</select>
+
+
+    <!-- 게시판 설정 게시판 수정 -->
+	<update id="adminBoardUpdate" parameterType="boardConfDTO">
+		update board_config set board_id = #{board_id}, board_skin = #{board_skin}, board_list_num = #{board_list_num}, board_page_num = #{board_page_num}, board_use_category=#{board_use_category}, board_use_comment=#{board_use_comment}, board_use_secret =#{board_use_secret}, board_use_only_secret =#{board_use_only_secret}, board_use_link1=#{board_use_link1}, board_use_link2=#{board_use_link2},  board_use_file1=#{ board_use_file1},  board_use_file2=#{ board_use_file2},  board_use_file3=#{ board_use_file3},  board_use_file4=#{ board_use_file4}, board_level_list=#{board_level_list}, board_level_view=#{board_level_view}, board_level_write=#{board_level_write}, board_level_comment=#{board_level_comment}, board_level_notice=#{board_level_notice}, board_level_modify =#{board_level_modify }, board_level_delete=#{board_level_delete}, board_date = sysdate where board_no = #{board_no}
+	</update>
+
+
+    <!-- 게시판 설정 게시판 삭제 -->
+	<delete id="adminBoardConfdel" parameterType="int">
+		delete from board_config where board_no = #{board_no}
+	</delete>
+	
+	<update id="adminBoardConfdelCategory" parameterType="boardConfDTO">
+		drop table board_category_${board_id}
+	</update>
+
+	<update id="adminBoardConfdelComment" parameterType="boardConfDTO">
+		drop table board_comment_${board_id}
+	</update>
+
+	<update id="adminBoardConfdelData" parameterType="boardConfDTO">
+		drop table board_data_${board_id}
+	</update>
+
+
+
 
 
 

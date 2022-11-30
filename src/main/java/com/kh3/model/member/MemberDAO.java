@@ -23,6 +23,9 @@ public interface MemberDAO {
 	// 회원 삭제 후 글번호 재작업
 	void updateSequence(int no);
 	
+	// 회원 정보 수정
+	int modifyOk(MemberDTO dto, String member_pw);
+	
 
 	
 	

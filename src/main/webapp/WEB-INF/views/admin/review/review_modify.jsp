@@ -1,24 +1,27 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-    
+<%@ include file="../layout/layout_header.jsp" %>
+
+
+<div class="page-info row mb-3">
+    <div class="d-flex align-items-center justify-content-between">
+        <h2>게시판 목록</h2>
+        <ol class="m-0 p-2">
+            <li>게시판 관리</li>
+            <li><b>게시판 목록</b></li>
+        </ol>
+    </div>
+</div>
+
+
+<div class="page-cont">
 
 <c:set var="dto" value="${Modify}" />
 <c:set var="rlist" value="${rlist }" />
 
-    
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
-</head>
-<body>
 
-
-  
 <div class="pb100">
-    <form method="post" action="<%=request.getContextPath() %>/admin/review_modify_ok.do">
+    <form method="post" action="<%=request.getContextPath() %>/admin/review/review_modify_ok.do">
   
     <input type="hidden" name="review_no" value="${dto.review_no}" />
    
@@ -95,6 +98,17 @@
     </div> 
  
 
+</div>
+
+
+<%@ include file="../layout/layout_footer.jsp" %>
+
+
+
+
+    
+
+  
 
 
 

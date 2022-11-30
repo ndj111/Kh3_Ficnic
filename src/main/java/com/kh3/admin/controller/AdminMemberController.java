@@ -16,7 +16,6 @@ import com.kh3.model.member.MemberDAO;
 import com.kh3.model.member.MemberDTO;
 import com.kh3.model.member.PointDAO;
 import com.kh3.model.member.PointDTO;
-import com.mybatis.model.BoardDTO;
 
 @Controller
 public class AdminMemberController {
