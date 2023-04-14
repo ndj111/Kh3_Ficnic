@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 관리자 : 카테고리 관련 -->
+<mapper namespace="categoryDAO">
+    <!-- 카테고리 목록 -->
+	<resultMap id="cateListMap" type="categoryDTO">
+        <result property="category_id" column="category_id" />
+	    <collection property="sub_category" column="category_id" select="adminCategoryListSub" javaType="java.util.ArrayList" ofType="categoryDTO" />
+	</resultMap>
+	 
+	<select id="adminCategoryList" resultMap="cateListMap">
+	    select * from ficnic_category where category_depth > 0 and category_id_up = 'M' order by category_rank asc
+	</select>
+	<select id="adminCategoryListSub" resultType="categoryDTO">
+	    select * from ficnic_category where category_depth = '2' and category_id_up = #{category_id} order by category_rank asc
+	</select>
+
+
+
+    <!-- 카테고리 정렬 순서 저장 -->
+    <update id="adminCategoryRank" parameterType="java.util.Map">
+        update ficnic_category set category_rank = #{rank} where category_id = #{cateid}
+    </update>
+
+
+
+    <!-- 카테고리 아이디 숫자 최대값 -->
+    <select id="adminCategoryIdMax" parameterType="java.util.Map" resultType="int">
+        <choose>
+            <when test="category_depth eq 1">
+            select nvl(max(substr(category_id,1,2)),0) + 1 from ficnic_category where category_depth = '1'
+            </when>
+            <otherwise>
+            select nvl(max(substr(category_id,3,2)),0) + 1 from ficnic_category where substr(category_id,1,2) = substr(#{ps_ctid},1,2)
+            </otherwise>
+        </choose>
+    </select>
+
+    <!-- 카테고리 정렬 순서 최대값 -->
+    <select id="adminCategoryRankMax" resultType="int">
+        select nvl(max(category_rank),0) + 1 from ficnic_category
+    </select>
+
+
+
+    <!-- 카테고리 추가 -->
+    <insert id="adminCategoryWrite" parameterType="CategoryDTO">
+        <selectKey resultType="int" keyProperty="category_no" order="BEFORE">
+            select nvl(max(category_no),0) from ficnic_category
+        </selectKey>
+        insert into ficnic_category values(#{category_no} + 1, #{category_show}, #{category_id}, #{category_depth}, #{category_id_up}, #{category_rank}, #{category_name}, #{category_image})
+    </insert>
+
+
+
+    <!-- 카테고리 수정 -->
+    <update id="adminCategoryModify" parameterType="CategoryDTO">
+        update ficnic_category set category_show = #{category_show}, category_name = #{category_name}, category_image = #{category_image} where category_id = #{category_id}
+    </update>
+
+
+
+    <!-- 카테고리 정보 가져오기 -->
+    <resultMap id="categoryContMap" type="categoryDTO">
+        <result property="category_id" column="category_id" />
+        <collection property="category_path" column="category_id" select="adminCategoryPath" javaType="String" ofType="String" />
+    </resultMap>
+     
+    <select id="adminCategoryCont" resultMap="categoryContMap">
+        select * from ficnic_category where category_id = #{ps_ctid}
+    </select>
+
+    <select id="adminCategoryPath" resultType="String">
+        select substr(sys_connect_by_path(category_name, ' > '), 4)
+        from ficnic_category
+        where category_id = #{category_id}
+        start with category_id_up = 'M'
+        connect by prior category_id = category_id_up
+    </select>
+
+
+
+    <!-- 카테고리 삭제 -->
+    <delete id="adminCategoryDelete" parameterType="String">
+        delete from ficnic_category where category_id = #{ps_ctid}
+    </delete>
+
+
+    <!-- 카테고리 번호 재지정 -->
+    <update id="adminCategorySeqUpdate" parameterType="int">
+        <![CDATA[
+            update ficnic_category set category_no = category_no - 1 where category_no > #{category_no}
+        ]]>
+    </update>
+
+
+    <!-- 카테고리 속한 상품들 카테고리 수정 -->
+    <update id="adminCategoryFicnicUpdate" parameterType="String">
+        update ficnic_list set ficnic_category_no = '00000000' where ficnic_category_no = #{ps_ctid}
+    </update>
+    <update id="adminCategoryFicnicUpdate1" parameterType="String">
+        update ficnic_list set ficnic_category_sub1 = '00000000' where ficnic_category_sub1 = #{ps_ctid}
+    </update>
+    <update id="adminCategoryFicnicUpdate2" parameterType="String">
+        update ficnic_list set ficnic_category_sub2 = '00000000' where ficnic_category_sub2 = #{ps_ctid}
+    </update>
+    <update id="adminCategoryFicnicUpdate3" parameterType="String">
+        update ficnic_list set ficnic_category_sub3 = '00000000' where ficnic_category_sub3 = #{ps_ctid}
+    </update>
+
+
+    <!-- 쿠폰 상세 내역에서 카테고리 정보 찾기 -->
+	<select id="admincheckCategory" resultType="String" parameterType="String">
+		select category_name from ficnic_category where category_id = #{coupon_use_value}
+	</select>
+
+
+</mapper>

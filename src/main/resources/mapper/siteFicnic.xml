@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 사이트 : 피크닉 관련 -->
+<mapper namespace="ficnicDAO">
+
+    <!-- 피크닉 목록 -->
+    <select id="SiteFicnicList" resultType="ficnicDTO">
+    
+    </select>
+    
+    
+    <!--검색 해당 카테고리 피크닉 개수  -->
+	<select id="SiteFicnicSearchCount" parameterType="map" resultType="int">		
+		select count(*) from ficnic_list
+		<![CDATA[where ficnic_no > 0]]>
+        <choose>
+            <when test="page_type eq 'new'">
+                <![CDATA[and ficnic_date > to_date(#{new_date})]]>
+            </when>
+
+            <otherwise>
+                <choose>
+                    <when test="search != ''">
+                    and ficnic_name like '%' || #{search} || '%'
+                    </when>
+
+                    <otherwise>
+                    and (
+                        substr(ficnic_category_no,1,${next_num}) = #{parent_str}
+                        or substr(ficnic_category_sub1,1,${next_num}) = #{parent_str}
+                        or substr(ficnic_category_sub2,1,${next_num}) = #{parent_str}
+                        or substr(ficnic_category_sub3,1,${next_num}) = #{parent_str}
+                    )
+                    </otherwise>
+                </choose>
+            </otherwise>
+        </choose>
+	</select>
+
+
+
+	<!-- 피크닉 검색 리스트  -->
+	<select id="SiteFicnicCategoryList" parameterType="map" resultType="ficnicDTO">
+        select * from(
+                    select
+                        row_number() over(
+                            <choose>
+                                <when test="page_type eq 'rank'">
+                                    order by ficnic_sale desc, ficnic_hit desc, ficnic_review_point desc
+                                </when>
+
+                                <when test="page_type eq 'new'">
+                                    order by ficnic_date desc
+                                </when>
+
+                                <otherwise>
+		                            <choose>
+		                                <when test="sort eq 'date'">order by ficnic_date desc</when>
+		                                <when test="sort eq 'review'">order by ficnic_review_point desc, ficnic_date desc</when>
+		                                <when test="sort eq 'high'">order by ficnic_sale_price desc, ficnic_date desc</when>
+		                                <when test="sort eq 'low'">order by ficnic_sale_price asc, ficnic_date desc</when>
+		                                <otherwise>order by ficnic_hit desc, ficnic_date desc</otherwise>
+		                            </choose>
+                                </otherwise>
+                            </choose>
+                        ) rnum,
+                        b.*,
+                        (select wish_no from member_wish where ficnic_no = b.ficnic_no and member_id = #{sess_id}) as ficnic_wish
+                    from (
+                        select * from ficnic_list
+                            <![CDATA[where ficnic_no > 0]]>
+                            <choose>
+                                <when test="page_type eq 'new'">
+                                    <![CDATA[and ficnic_date > to_date(#{new_date})]]>
+                                </when>
+
+                                <otherwise>
+	                                <choose>
+	                                    <when test="search != ''">
+	                                    and ficnic_name like '%' || #{search} || '%'
+	                                    </when>
+	    
+	                                    <otherwise>
+	                                    and (
+	                                        substr(ficnic_category_no,1,${next_num}) = #{parent_str}
+	                                        or substr(ficnic_category_sub1,1,${next_num}) = #{parent_str}
+	                                        or substr(ficnic_category_sub2,1,${next_num}) = #{parent_str}
+	                                        or substr(ficnic_category_sub3,1,${next_num}) = #{parent_str}
+	                                    )
+	                                    </otherwise>
+	                                </choose>
+                                </otherwise>
+                            </choose>
+                    )b
+        )
+        <![CDATA[where rnum >= #{startNo} and rnum <= #{endNo}]]>
+	</select>
+
+	
+	
+
+	<select id="SiteFicnicChildCategory" parameterType="string" resultType="string">
+		select category_id from ficnic_category where category_id_up = #{value}
+	</select>
+	
+	<select id="SiteFicnicReviewList" resultType="reviewDTO">
+		select * from review_list
+	</select>
+
+	
+	<select id="siteFicnicName" parameterType="string" resultType="string">
+		select category_name from ficnic_category where category_id = #{ficnic_name}
+	</select>
+	
+
+    <select id="siteFicnicPointCount" resultType="int">
+    select sum(review_point) from review_list where ficnic_no = #{ficnic_no}
+ 	</select>
+ 	
+ 	
+ 	 <!-- 리뷰 목록 총 갯수 -->
+    <select id="siteFicnicCount" resultType="int">
+        select count(review_no) from review_list where ficnic_no = #{ficnic_no}
+    </select>
+
+
+    <!-- 피크닉 조회수 늘리기 -->
+    <update id="siteFicnicUpdateHit" parameterType="int">
+        update ficnic_list set ficnic_hit = ficnic_hit + 1 where ficnic_no = #{ficnic_no}
+    </update>
+
+
+</mapper>

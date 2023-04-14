@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 관리자 : 피크닉 관련 -->
+<mapper namespace="ficnicDAO">
+
+    <!-- 피크닉 목록 -->
+    <select id="adminFicnicList" resultType="ficnicDTO">
+    	select * from ficnic_list order by ficnic_no desc
+    </select>
+    
+
+
+    <!-- 피크닉 등록 -->
+    <insert id="adminFicnicWrite" parameterType="ficnicDTO">
+    	<selectKey resultType="int" keyProperty="ficnic_no" order="BEFORE">
+           select nvl(max(ficnic_no),0) from ficnic_list
+       </selectKey>
+    	insert into ficnic_list values(#{ficnic_no}+1,#{ficnic_category_no},#{ficnic_category_sub1},#{ficnic_category_sub2},#{ficnic_category_sub3},#{ficnic_name},#{ficnic_market_price},#{ficnic_sale_price},#{ficnic_option_title},#{ficnic_option_price},#{ficnic_select_title},#{ficnic_select_price},#{ficnic_date_use},#{ficnic_photo1},#{ficnic_photo2},#{ficnic_photo3},#{ficnic_photo4},#{ficnic_photo5},#{ficnic_info},#{ficnic_detail},#{ficnic_curriculum},#{ficnic_etc},#{ficnic_location},#{ficnic_address},#{ficnic_include},#{ficnic_notinclude},#{ficnic_prepare},#{ficnic_caution},#{ficnic_review_point},#{ficnic_review_count},#{ficnic_hit},#{ficnic_sale},sysdate)
+    </insert>
+    
+
+
+    <!-- 해당 피크닉 정보  -->
+    <resultMap id="ficnicContMap" type="ficnicDTO">
+        <result property="ficnic_category_no" column="ficnic_category_no" />
+        <result property="ficnic_category_sub1" column="ficnic_category_sub1" />
+        <result property="ficnic_category_sub2" column="ficnic_category_sub2" />
+        <result property="ficnic_category_sub3" column="ficnic_category_sub3" />
+        <collection property="ficnic_category_name" column="ficnic_category_no" select="adminFicnicCategoryName" javaType="String" ofType="String" />
+        <collection property="ficnic_category_sub1_name" column="ficnic_category_sub1" select="adminFicnicCategorySub1Name" javaType="String" ofType="String" />
+        <collection property="ficnic_category_sub2_name" column="ficnic_category_sub2" select="adminFicnicCategorySub2Name" javaType="String" ofType="String" />
+        <collection property="ficnic_category_sub3_name" column="ficnic_category_sub3" select="adminFicnicCategorySub3Name" javaType="String" ofType="String" />
+    </resultMap>
+     
+    <select id="adminFicnicCont" resultMap="ficnicContMap">
+        select * from ficnic_list where ficnic_no = #{no}
+    </select>
+
+    <select id="adminFicnicCategoryName" resultType="String">
+        select substr(sys_connect_by_path(category_name, ' > '), 4)
+        from ficnic_category
+        where category_id = #{ficnic_category_no}
+        start with category_id_up = 'M'
+        connect by prior category_id = category_id_up
+    </select>
+
+    <select id="adminFicnicCategorySub1Name" resultType="String">
+        select substr(sys_connect_by_path(category_name, ' > '), 4)
+        from ficnic_category
+        where category_id = #{ficnic_category_sub1}
+        start with category_id_up = 'M'
+        connect by prior category_id = category_id_up
+    </select>
+
+    <select id="adminFicnicCategorySub2Name" resultType="String">
+        select substr(sys_connect_by_path(category_name, ' > '), 4)
+        from ficnic_category
+        where category_id = #{ficnic_category_sub2}
+        start with category_id_up = 'M'
+        connect by prior category_id = category_id_up
+    </select>
+
+    <select id="adminFicnicCategorySub3Name" resultType="String">
+        select substr(sys_connect_by_path(category_name, ' > '), 4)
+        from ficnic_category
+        where category_id = #{ficnic_category_sub3}
+        start with category_id_up = 'M'
+        connect by prior category_id = category_id_up
+    </select>
+	
+
+
+
+	<!-- 해당 피크닉 수정  -->
+	<update id="adminFicnicModify" parameterType="ficnicDTO">
+		update ficnic_list set
+		ficnic_category_no = #{ficnic_category_no},
+		ficnic_category_sub1 = #{ficnic_category_sub1},
+		ficnic_category_sub2 = #{ficnic_category_sub2},
+		ficnic_category_sub3 = #{ficnic_category_sub3},
+		ficnic_name = #{ficnic_name},
+		ficnic_market_price = #{ficnic_market_price},
+		ficnic_sale_price = #{ficnic_sale_price},
+		ficnic_option_title = #{ficnic_option_title},
+		ficnic_option_price = #{ficnic_option_price},
+		ficnic_select_title = #{ficnic_select_title},
+		ficnic_select_price = #{ficnic_select_price},
+		ficnic_date_use = #{ficnic_date_use},
+		ficnic_photo1 = #{ficnic_photo1},
+		ficnic_photo2 = #{ficnic_photo2},
+		ficnic_photo3 = #{ficnic_photo3},
+		ficnic_photo4 = #{ficnic_photo4},
+		ficnic_photo5 = #{ficnic_photo5},
+		ficnic_info = #{ficnic_info},
+		ficnic_detail = #{ficnic_detail},
+		ficnic_curriculum = #{ficnic_curriculum},
+		ficnic_etc = #{ficnic_etc},
+		ficnic_location = #{ficnic_location},
+		ficnic_address = #{ficnic_address},
+		ficnic_include = #{ficnic_include},
+		ficnic_notinclude = #{ficnic_notinclude},
+		ficnic_prepare = #{ficnic_prepare},
+		ficnic_caution = #{ficnic_caution},
+		ficnic_sale = #{ficnic_sale},
+		ficnic_date = sysdate where ficnic_no=#{ficnic_no}
+	</update>
+
+
+
+	<!-- 해당 피크닉 삭제  -->
+	<delete id="adminFicnicDelete" parameterType="int">
+		delete from ficnic_list where ficnic_no = #{no}	
+	</delete>
+
+
+
+    <!-- 피크닉 이미지 삭제 -->
+    <update id="adminDeleteFicnicImage" parameterType="java.util.Map">
+        update ficnic_list set ficnic_photo${img_no} = null where ficnic_no = #{no}
+    </update>
+
+
+
+	<!--검색 해당 피크닉 개수  -->
+	<select id="adminFicnicSearchCount" parameterType="map" resultType="int">		
+		select count(*) from ficnic_list where ficnic_no > 0
+         <if test="search_location != ''"> and ficnic_location like '%'|| #{search_location} || '%' </if>
+         <if test="search_category != ''"> and (substr(ficnic_category_no,1,2) = substr(#{search_category},0,2) or substr(ficnic_category_sub1,1,2) = substr(#{search_category},0,2) or substr(ficnic_category_sub2,1,2) = substr(#{search_category},0,2) or substr(ficnic_category_sub3,1,2) = substr(#{search_category},0,2))</if>
+         <if test="search_name != ''"> and ficnic_name like '%' || #{search_name} || '%'</if>
+	</select>
+	
+
+
+	<!-- 피크닉 검색 리스트 -->
+    <resultMap id="ficnicListMap" type="ficnicDTO">
+        <result property="ficnic_category_no" column="ficnic_category_no" />
+        <collection property="ficnic_category_name" column="ficnic_category_no" select="adminFicnicListCategoryName" javaType="String" ofType="String" />
+    </resultMap>
+     
+    <select id="adminFicnicSearchList" parameterType="map" resultMap="ficnicListMap">
+        select * from(
+                      select
+                            row_number() over(order by ficnic_no desc) rnum,
+                            b.*
+                      from (
+                            select * from ficnic_list where ficnic_no > 0
+                            <if test="search_location != ''"> and ficnic_location like '%'|| #{search_location} || '%' </if>
+                            <if test="search_category != ''"> and (substr(ficnic_category_no,1,2) = substr(#{search_category},0,2) or substr(ficnic_category_sub1,1,2) = substr(#{search_category},0,2) or substr(ficnic_category_sub2,1,2) = substr(#{search_category},0,2) or substr(ficnic_category_sub3,1,2) = substr(#{search_category},0,2))</if>
+                            <if test="search_name != ''"> and ficnic_name like '%' || #{search_name} || '%'</if>
+                      ) b
+        )
+        <![CDATA[
+            where rnum >= #{startNo} and rnum <= #{endNo}
+        ]]>
+    </select>
+
+    <select id="adminFicnicListCategoryName" resultType="String">
+        select substr(sys_connect_by_path(category_name, ' > '), 4)
+        from ficnic_category
+        where category_id = #{ficnic_category_no}
+        start with category_id_up = 'M'
+        connect by prior category_id = category_id_up
+    </select>
+
+
+
+    <!-- 쿠폰 상세 내역에서 상품 정보 찾기 -->
+	<select id="admincheckFicnic" resultType="String" parameterType="String">
+		select ficnic_name from ficnic_list where ficnic_category_no = #{coupon_use_value}
+	</select>
+
+
+
+    <!-- 리뷰 수정시 총점 수정 -->
+    <update id="adminFIcnicUpdateReview" parameterType="java.util.Map">
+        <selectKey resultType="String" keyProperty="set_review_point" order="BEFORE">
+           select nvl(avg(nvl(review_point, 1)),0) from review_list where ficnic_no = #{ficnic_no}
+       </selectKey>
+        update ficnic_list set ficnic_review_point = #{set_review_point} where ficnic_no = #{ficnic_no}
+    </update>
+
+
+
+    <!-- 피크닉 검색 리스트  -->
+    <select id="adminFicnicPopSearchList" parameterType="String" resultType="ficnicDTO">
+        select * from ficnic_list where ficnic_no > 0
+        <if test="value != ''"> and ficnic_name like '%' || #{value} || '%'</if>
+        order by ficnic_no desc
+    </select>
+
+
+    <!-- 리뷰 등록시 리뷰 갯수 수정 -->
+    <update id="adminFicnicUpdateReviewCont" parameterType="java.util.Map">
+        <selectKey resultType="String" keyProperty="set_ficnic_review_count" order="BEFORE">
+           select count(*) from review_list where ficnic_no = #{ficnic_no}
+       </selectKey>
+        update ficnic_list set ficnic_review_count = #{set_ficnic_review_count} where ficnic_no = #{ficnic_no}
+    </update>
+
+
+</mapper>

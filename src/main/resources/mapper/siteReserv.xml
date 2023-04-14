@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 사이트 : 예약 관련 -->
+<mapper namespace="reservDAO">
+
+    <!-- 검색 페이징 개수  -->
+	<select id="siteReservCount" parameterType="map" resultType="int">
+		select count(*) from reserv_list where reserv_no > 0
+		<if test="member_id != ''">and member_id = #{member_id}</if>
+		<choose>
+			<when test="getType.equals('reserv')">and reserv_status = #{getType}</when>
+			<when test="getType.equals('confirm')">and reserv_status = #{getType}</when>
+			<when test="getType.equals('done')">and reserv_status = #{getType}</when>
+			<when test="getType.equals('cancel')">and reserv_status = #{getType}</when>
+		</choose>
+	</select>
+	
+	<!-- 예약 목록 --><!-- 해당 검색 페이징 리스트  -->
+    <select id="siteReservList" parameterType="map" resultType="reservDTO">
+    	select * from(
+	                select
+	                    row_number() over(order by reserv_no desc) rnum,
+	                    b.*
+	                from (
+	                select * from reserv_list where reserv_no > 0
+	                <if test="member_id != ''"> and member_id = #{member_id}</if>
+			    	<choose>
+						<when test="getType.equals('reserv')">and reserv_status = #{getType}</when>
+						<when test="getType.equals('confirm')">and reserv_status = #{getType}</when>
+						<when test="getType.equals('done')">and reserv_status = #{getType}</when>
+						<when test="getType.equals('cancel')">and reserv_status = #{getType} </when>
+					</choose>
+    )b
+			)
+			 <![CDATA[
+	            where rnum >= #{startNo} and rnum <= #{endNo}
+	        ]]>
+    </select>
+	
+	<select id="siteReservCont" parameterType="int" resultType="reservDTO">
+		select * from reserv_list where reserv_no =#{value}
+	</select>
+
+	<select id="siteReservSessionList" parameterType="string" resultType="reservDTO">
+		select * from reserv_list where member_id = #{value}
+	</select>
+	
+	<update id="siteChangeReservStatus" parameterType="reservDTO">
+		update reserv_list set reserv_status = 'cancel' where reserv_no = #{reserv_no} and reserv_status = 'reserv'
+	</update>
+	
+	<insert id="siteReservFicnic" parameterType="reservDTO">
+		<selectKey resultType="int" keyProperty="reserv_no" order="BEFORE">
+			select max(reserv_no) from reserv_list
+		</selectKey>
+		insert into reserv_list values(
+		#{reserv_no}+1,
+		#{reserv_sess},
+		default,
+		#{ficnic_no},
+		#{reserv_ficnic_name},
+		#{reserv_ficnic_sale_price},
+		#{reserv_ficnic_option_title},
+		#{reserv_ficnic_option_price},
+		#{reserv_ficnic_select_title},
+		#{reserv_ficnic_select_price},
+		#{reserv_ficnic_photo},
+		to_date(#{reserv_ficnic_date},'yy/mm/dd'),
+		#{reserv_use_coupon},
+		#{reserv_coupon_price},
+		#{reserv_use_point},
+		#{reserv_payment},
+		#{reserv_total_price},
+		#{reserv_with},
+		#{member_id},
+		#{reserv_name},
+		sysdate,
+		#{reserv_phone},
+		#{reserv_email}
+		)
+	</insert>
+
+	<select id="siteReservCheckSessList" parameterType="string" resultType="reservDTO">
+		select * from reserv_list where reserv_sess like '%' || #{todayDate} ||'%'
+	</select>
+
+</mapper>

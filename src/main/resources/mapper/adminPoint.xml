@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 관리자 : 적립금 관련 -->
+<mapper namespace="pointDAO">
+
+    <!-- 적립금 목록 -->
+    <select id="adminPointList" resultType="pointDTO">
+    </select>
+
+
+    <!-- 회원가입 포인트 적립 -->
+	<insert id="joinPoint" parameterType="pointDTO">
+		<selectKey resultType="int" keyProperty="point_no" order="BEFORE">
+			select nvl(max(point_no),0) from member_point
+		</selectKey>
+		insert into member_point values(#{point_no} + 1,'join', '', '',#{member_id}, default, 1000, '회원가입 축하 적립금 지급', sysdate)
+    </insert>
+    
+    <!-- 관리자 적립금 수정 -->
+	<insert id="modifyPoint" parameterType="pointDTO">
+		<selectKey resultType="int" keyProperty="point_no" order="BEFORE">
+			select nvl(max(point_no),0) from member_point
+		</selectKey>
+		insert into member_point values(#{point_no} + 1,'admin', '', '',#{member_id}, #{point_type}, #{point_add}, '적립금 관리자 수정', sysdate)
+    </insert>
+	
+	<!-- 회원 포인트 상세내역 -->
+	<select id="pointView" parameterType="String" resultType="pointDTO">
+		select * from member_point where member_id = #{member_id} order by point_date desc
+	</select>
+	
+
+</mapper>

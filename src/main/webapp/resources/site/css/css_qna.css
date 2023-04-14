@@ -1,0 +1,232 @@
+/*************************/
+/* 1대1문의하기 관련
+/*************************/
+
+.dCffyL {
+	width: 100%;
+    height: 100%;
+    min-height: 275px;
+    margin-top: 15px;
+    margin-bottom: 10px;
+    outline: none;
+    resize: none;
+    border: 1px solid #ddd !important;
+}
+
+.fIDbHx {
+    width: 100%;
+    padding: 20px;
+    text-align: center;
+    background-color: white;
+}
+
+.writeBtn {
+	width: 100%;
+    height: 50px;
+    line-height: normal;
+    padding: 0px 13px;
+    background-color: rgb(51, 151, 255);
+    text-align: center;
+    cursor: pointer;
+    border-radius: 5px;
+    color: white;
+    font-size: 15px;
+}
+
+.fileDiv {
+	padding-bottom: 10px;
+}
+
+.dCffyLn {
+	width: 100%;
+    height: 40px;
+    min-height: 5px;
+    outline: none;
+    resize: none;	
+	font-size: 20px;
+	border: 1px solid #ddd !important;
+}
+
+/*************************/
+/* 마이페이지 1대1문의 보기 관련
+/*************************/
+
+.qv-btn {
+    position: relative;
+    width: 100%;
+    margin-top: 30px;
+    text-align: center;
+}
+
+.qv-btn a {
+    display: inline-block;
+    width: 120px;
+    height: 48px;
+    padding-top: 12px;
+    margin-left: 5px;
+    margin-right: 5px;
+    box-sizing: border-box;
+    color: #fff;
+    background: #000;
+    border: 1px solid #000;
+}
+
+.qv-btn a:hover {
+    opacity: 0.8;
+}
+.qv-btn a.delete {
+    background: #ff0045;
+    border-color: #ff0045;
+}
+
+.qv-btn a.modify {
+    color: #000;
+    background: #fff;
+}
+
+.comment-write {
+    position: relative;
+    width: 100%;
+    margin: 0 auto;
+    padding: 0;
+    box-sizing: border-box;	
+}
+
+.comment-write th,
+ td {
+	padding: 10px;
+}
+
+
+.comment-write td button {
+    display: block;
+    width: 120px;
+    height: 80px;
+    box-sizing: border-box;
+    text-align: center;
+    font-size: 14px;
+    vertical-align: middle;
+    color: #fff;
+    background: #000;
+    border: 1px solid #000;
+}
+
+.comment-write td button:hover,
+.qv-btn a.list:hover {
+    opacity: 0.8;
+    background: #ff0045;
+    border: 1px solid #ff0045;
+}
+
+.qv-btn a.modify:hover {
+    color: #ff0045;
+    border: 1px solid #ff0045;
+    
+}
+
+.comment-write td textarea {
+    border: 1px solid #e5e5e5;
+    width: 100%;
+    height: 80px;
+    font-size: 14px;
+    line-height: 1.4;
+    padding: 15px;
+    resize: none;
+}
+
+.comment-write td textarea:focus {
+    border-color: #ff0045;
+}
+
+h4 {
+    position: relative;
+    width: 100%;
+    box-sizing: border-box;
+    font-size: 20px;
+    font-weight: 500;
+    line-height: 40px;
+}
+
+.table-form,
+.table-list {
+    position: relative;
+    width: 100%;
+    margin: 0 auto;
+    padding: 0;
+    box-sizing: border-box;
+    border-top: 2px solid #000;
+}
+
+.table-form th,
+.table-form td,
+#mComment-list th {
+    margin: 0;
+    padding: 18px 14px;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.2;
+    color: #666;
+    text-align: left;
+    vertical-align: middle;
+    border-bottom: 1px solid #f1f1f1 !important;
+}
+
+#mComment-list th p,
+.comment-write td p {
+	text-align: center;
+}
+
+
+.table-form td {
+    color: #181818;
+}
+
+	
+.table-form td.tdImg {
+	font-size: 0;
+}
+
+.qnaImg {
+	display: inline-block;
+	width: 90px;
+}
+
+.tdImg p {
+	display: inline-block;
+	width: calc(100% - 90px);
+	font-size: 17px;
+    vertical-align: middle;
+	padding-left: 10px;
+}
+
+.tdImg p .engnum {
+	display: block;
+	margin-top: 10px;
+}
+
+.tdImg p .fileSpan {
+	display: block;
+	margin-top: 8px;
+	margin-bottom: 5px;
+}
+
+.table-form th {
+    text-align: center;
+    background: #f9f9f9;
+    font-size: inherit;
+    vertical-align: middle;
+}
+
+.table-list #nodata {
+    height: 200px !important;
+    text-align: center;
+    font-family: 'Raleway';
+    font-weight: 500;
+    letter-spacing: 0;
+    border-bottom: 1px solid #f1f1f1 !important;
+}
+
+textarea {
+    resize: none;
+}
+

@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 사이트 : 게시판 관련 -->
+<mapper namespace="boardDAO">
+
+    <!-- 게시판 목록 -->
+    <select id="siteBoardList" resultType="boardDTO">
+    	select * from board_data_${value} order by bdata_headnum asc
+    </select>
+
+
+
+	<!-- 게시물 총 갯수 -->
+	<select id="SiteBoardTotal" parameterType="java.util.Map" resultType="int">
+        select count(*) from board_data_${bbs_id} where bdata_no > 0
+        <choose>
+            <when test="field.equals('title') and keyword != ''"> and bdata_title like '%' || #{keyword} || '%'</when>
+            <when test="field.equals('cont') and keyword != ''"> and bdata_cont like '%' || #{keyword} || '%'</when>
+            <when test="field.equals('writer') and keyword != ''"> and bdata_writer_name like '%' || #{keyword} || '%'</when>
+        </choose>
+        <if test="category > 0">and bdata_category = #{category}</if>
+    </select>
+
+
+
+    <resultMap id="siteBdataListMap" type="boardDto">
+        <result property="bdata_category" column="bdata_category" />
+        <result property="board_id" column="board_id" />
+        <result property="bdata_writer_id" column="bdata_writer_id" />
+        <collection property="bdata_category_name" column="{bdata_category=bdata_category, board_id=board_id}" select="siteBoardCategoryName" javaType="String" ofType="String" />
+        <collection property="bdata_writer_type" column="bdata_writer_id" select="siteBoardWriterType" javaType="String" ofType="String" />
+    </resultMap>
+     
+    <select id="SiteBoardList" parameterType="java.util.Map" resultMap="siteBdataListMap">
+        select * from(
+                      select
+                            row_number() over(order by bdata_headnum asc) rnum,
+                            b.*
+                      from (
+                            select * from board_data_${bbs_id} where bdata_no > 0
+                            <choose>
+                                <when test="field.equals('title') and keyword != ''"> and bdata_title like '%' || #{keyword} || '%'</when>
+                                <when test="field.equals('cont') and keyword != ''"> and bdata_cont like '%' || #{keyword} || '%'</when>
+                                <when test="field.equals('writer') and keyword != ''"> and bdata_writer_name like '%' || #{keyword} || '%'</when>
+                            </choose>
+                            <if test="category > 0">and bdata_category = #{category}</if>
+                      ) b
+        )
+        <![CDATA[
+            where rnum >= #{startNo} and rnum <= #{endNo}
+        ]]>
+    </select>
+
+    <select id="siteBoardCategoryName" parameterType="java.util.Map" resultType="String">
+        select bcate_name from board_category_${board_id} where bcate_no = #{bdata_category}
+    </select>
+
+    <select id="siteBoardWriterType" parameterType="String" resultType="String">
+        select member_type from member_list where member_id = #{bdata_writer_id}
+    </select>
+
+
+
+
+
+	<update id="SiteBoardUpdateHit" parameterType="map" >
+		update board_data_${bbs_id} set bdata_hit=bdata_hit+1 where bdata_no=#{bdata_no}
+	</update>
+
+
+
+
+	<!-- 해당 게시판 해당 게시글 불러오기 -->
+    <resultMap id="siteBdataContMap" type="boardDto">
+        <result property="bdata_writer_id" column="bdata_writer_id" />
+        <collection property="bdata_writer_type" column="bdata_writer_id" select="siteBoardContWriterType" javaType="String" ofType="String" />
+    </resultMap>
+
+	<select id="SiteBoardDto" parameterType="map" resultMap="siteBdataContMap">
+		select * from board_data_${bbs_id} where bdata_no = #{bdata_no} 
+	</select>
+
+    <select id="siteBoardContWriterType" parameterType="String" resultType="String">
+        select member_type from member_list where member_id = #{bdata_writer_id}
+    </select>
+
+
+
+	<!-- 해당 게시판 게시글 작성 -->
+	<insert id="SiteBoardInsert" parameterType="map">
+	 	<selectKey resultType="int" keyProperty="dto.bdata_no" order="BEFORE">
+           select nvl(max(bdata_no),0) from board_data_${bbs_id}
+       </selectKey>
+		insert into board_data_${bbs_id} values(#{dto.bdata_no}+1,
+		#{bbs_id},
+		#{dto.bdata_headnum},
+		#{dto.bdata_category},
+		#{dto.bdata_title},
+		#{dto.bdata_cont},
+		#{dto.bdata_sub},
+		#{dto.bdata_link1},
+		#{dto.bdata_link2},
+		#{dto.bdata_file1},
+		#{dto.bdata_file2},
+		#{dto.bdata_file3},
+		#{dto.bdata_file4},
+		default,
+		nvl(#{dto.bdata_use_notice},'N'),
+		nvl(#{dto.bdata_use_secret},'N'),
+		default,default,#{dto.bdata_writer_id},
+		#{dto.bdata_writer_pw},
+		#{dto.bdata_writer_name},
+		sysdate)
+	</insert>
+
+
+
+
+	<!-- 해당 게시판 게시글 업데이트 -->
+	<update id="SiteBoardUpdate" parameterType="map">
+		update
+		board_data_${bbs_id} set
+		bdata_headnum = #{dto.bdata_headnum},
+		bdata_category = #{dto.bdata_category},
+		bdata_use_secret = #{dto.bdata_use_secret},
+		bdata_title = #{dto.bdata_title},
+		bdata_cont = #{dto.bdata_cont},
+		bdata_sub = #{dto.bdata_sub},
+		bdata_link1 = #{dto.bdata_link1},
+		bdata_link2 = #{dto.bdata_link2},
+		bdata_file1 = #{dto.bdata_file1},
+		bdata_file2 = #{dto.bdata_file2},
+		bdata_file3 = #{dto.bdata_file3},
+		bdata_file4 = #{dto.bdata_file4},
+		bdata_ficnic = #{dto.bdata_ficnic},
+		bdata_use_notice = nvl(#{dto.bdata_use_notice},'N'),
+		bdata_date = sysdate where bdata_no = #{dto.bdata_no}
+	</update>
+	
+
+
+
+	<!-- 해당 게시판 게시글 삭제  -->
+	<delete id="SiteBoardDelete" parameterType="map">
+		delete from board_data_${bbs_id} where bdata_no= #{bdata_no}
+	</delete>
+
+
+
+    <!-- 해당 게시판의 최소 헤드넘버 구하기 -->
+    <select id="SiteBoardGetMinHeadnum" parameterType="String" resultType="int">
+        select nvl(min(bdata_headnum),0) from board_data_${value} where bdata_headnum > 1000
+    </select>
+
+
+    <!-- 해당 게시판의 최소 헤드넘버 구하기 (공지글) -->
+    <select id="SiteBoardGetMinHeadnumNotice" parameterType="String" resultType="int">
+        select nvl(min(bdata_headnum),0) from board_data_${value}
+        <![CDATA[where bdata_headnum < 1000 and bdata_headnum > 1]]>
+    </select>
+
+
+
+</mapper>

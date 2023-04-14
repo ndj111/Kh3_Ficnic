@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 관리자 : 회원보유 쿠폰 관련 -->
+<mapper namespace="mcouponDAO">
+
+    <!-- 보유 쿠폰 목록 -->
+    <select id="adminMcouponList" resultType="mcouponDTO">
+    </select>
+
+
+	<!-- 회원 쿠폰 상세내역 -->
+	<select id="couponView" parameterType="String" resultType="mcouponDTO">
+		select * from member_mcoupon m join coupon_list c on m.coupon_no = c.coupon_no where m.member_id = #{member_id}
+	</select>
+
+	<!-- 회원이 가지고 있는 쿠폰 삭제 -->
+	<delete id="adminMCouponDelete" parameterType="int">
+		delete from member_mcoupon where coupon_no = #{coupon_no }
+	</delete>
+	
+
+
+</mapper>

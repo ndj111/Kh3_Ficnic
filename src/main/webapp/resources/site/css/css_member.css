@@ -1,0 +1,335 @@
+/*************************/
+/* 회원 관련
+/*************************/
+
+
+/*************************/
+/* 로그인
+/*************************/
+.member-login table {
+	text-align: center;
+	margin-top: 20px;
+	font-size: 20px;
+	border-collapse: separate; /* 셀 간격 */
+	border-spacing: 20px;
+	margin: auto; /* 테이블 위치 중앙 정렬 */
+	margin-bottom: 150px;
+	border: 1px #eee solid;
+	width: 450px;
+	padding-top: 25px;
+	padding-bottom: 25px;
+}
+
+.login_tr {
+	text-align: center;
+	color: black;
+	font-size: 25px;
+	font-weight: 200; /* 폰트 얇이 (낮을수록 얇음 */
+	line-height: 35px; /* 글씨체 상하 간격 */
+}
+
+.member-login input {
+	font-size: 15px;
+	font-weight: 200;
+	color: #333;
+	text-align: left;
+	width: 84%; /*input 바깥과 크기 */
+	outline: none;
+	background: none;
+	padding: 0 5px;
+	height: 50px; /* 글자와 밑 줄 사이 간격 */
+	letter-spacing: 0.8px;
+	border: none;
+	border-bottom: 1px solid #eee;
+}
+
+.member-login input:focus {
+
+	border-bottom: 1px solid #757575;
+	outline: 0;
+
+  }
+  
+.member-login .btnLogin {
+	margin-top: 80px;
+	width: 300px;
+	height: 48px;
+	font-size: 16px;
+	color: #fff;
+	line-height: 48px;
+	background-color: #2d2d2d;
+	text-align: center;
+	width: 370px;
+	transition: background 0.2s ease-in-out;
+}
+
+.member-login .btnLogin:hover {
+	margin-top: 80px;
+	width: 300px;
+	height: 48px;
+	font-size: 16px;
+	color: #fff;
+	line-height: 48px;
+	background-color: #ff0045;
+	text-align: center;
+	width: 370px;
+	transition: background 0.2s ease-in-out;
+}
+
+.member-login i {
+	color: black;
+}
+
+.mf-find a {
+	color: black;
+}
+
+.mf-find a:hover {
+	color: red;
+}
+
+
+
+
+/*************************/
+/* 회원 가입
+/*************************/
+.member-join table {
+	font-size: 20px;
+	border-collapse: separate; /* 셀 간격 */
+	border-spacing: 20px;
+	margin: auto; /* 테이블 위치 중앙 정렬 */
+	margin-top: 20px;
+	margin-bottom: 150px;
+	border: 1px #eee solid;
+	width: 450px;
+	padding-top: 35px;
+	padding-bottom: 35px;
+}
+
+.join_td {
+	text-align: center;
+	color: black;
+	font-size: 25px;
+	font-weight: 200; /* 폰트 얇이 (낮을수록 얇음) */
+	line-height: 35px; /* 글씨체 상하 간격 */
+	padding-bottom: 30px;
+}
+
+.member-join input {
+	margin: 5px 0px 0px 35px; 
+	font-size: 14px;
+	font-weight: 300;
+	color: #333;
+	text-align: left;
+	width: 84%; /*input 바깥과 크기 */
+	outline: none;
+	background: none;
+	padding: 0 5px;
+	height: 50px; /* 글자와 밑 줄 사이 간격 */
+	letter-spacing: 0.8px;
+	border: none;
+	border-bottom: 1px solid #eee;
+}
+
+.member-join input:focus {
+
+	border-bottom: 1px solid #757575;
+	outline: 0;
+
+  }
+
+.member-join .btnJoin {
+	margin: 5px 0px 0px 35px; 
+	margin-top: 30px;
+	height: 48px;
+	font-size: 16px;
+	color: #fff;
+	line-height: 48px;
+	background-color: #2d2d2d;
+	text-align: center;
+	width: 320px;
+	transition: background 0.2s ease-in-out;
+}
+
+.member-join .btnJoin:hover {
+	margin: 5px 0px 0px 35px; 
+	margin-top: 30px;
+	height: 48px;
+	font-size: 16px;
+	color: #fff;
+	line-height: 48px;
+	background-color: #ff0045;
+	text-align: center;
+	width: 320px;
+	transition: background 0.2s ease-in-out;
+}
+
+.member-join a {
+	color: black;
+}
+
+.member-join a:hover {
+	color: red;
+}
+
+.member-join label {
+	font-size: 13px;
+	text-align: left;
+	padding-left: 40px;
+}
+
+.join_check {
+	font-size: 14px;
+	 margin: 5px 0px 0px 35px; 
+    vertical-align: middle;
+}
+
+
+
+/*************************/
+/* 아이디/ 비밀번호 찾기
+/*************************/
+
+.member-find table {
+	font-size: 20px;
+	border-collapse: separate; /* 셀 간격 */
+	border-spacing: 20px;
+	margin: auto; /* 테이블 위치 중앙 정렬 */
+	border: 1px #eee solid;
+	width: 450px;
+	margin-top: 20px;
+	padding-top: 35px;
+	padding-bottom: 35px;
+}
+
+
+.member-find input {
+ 	margin: -3px 0px 0px 35px; 
+    vertical-align: middle;
+	font-size: 16px;
+	font-weight: 200;
+	color: #333;
+	text-align: left;
+	width: 78%; /* input 바깥과 크기 */
+	outline: none;
+	background: none;
+	padding: 0 5px;
+	height: 50px; /* 글자와 밑 줄 사이 간격 */
+	letter-spacing: 0.8px;
+	border: none;
+	border-bottom: 1px solid #eee;
+	
+}
+
+.member-find input:focus {
+
+	border-bottom: 1px solid #757575;
+	outline: 0;
+
+  }
+  
+
+/* 버튼 */
+.member-find .btnFind {
+	margin: 5px 0px 0px 35px; 
+	height: 48px;
+	font-size: 16px;
+	color: #fff;
+	line-height: 48px;
+	background-color: #2d2d2d;
+	text-align: center;
+	width: 330px;
+	transition: background 0.2s ease-in-out;
+}
+
+/* 버튼 hover */
+.member-find .btnFind:hover {
+	margin: 5px 0px 0px 35px; 
+	height: 48px;
+	font-size: 16px;
+	color: #fff;
+	line-height: 48px;
+	background-color: #ff0045;
+	text-align: center;
+	width: 330px;
+	transition: background 0.2s ease-in-out;
+}
+
+/* 아이디찾기/ 비밀번호 찾기 a태그 */
+.member-find .findfind {
+	color: black;
+	padding-top: 100px;
+}
+
+.member-find .findfind:hover {
+	color: red;
+}
+
+.member-find .find_p {
+	padding-top: 10px;
+}
+
+
+
+
+/*************************/
+/* 아이디 / 비밀번호 찾기 결과
+/*************************/
+
+
+.member-find-result {
+	font-size: 15px;
+	font-weight: 400; /* 폰트 얇이 (낮을수록 얇음) */
+	text-align: center;
+	margin: auto; /* 테이블 위치 중앙 정렬 */
+	margin-top: 20px;
+	border-collapse: separate; /* 셀 간격 */
+	border-spacing: 20px;
+	margin-bottom: 150px;
+	border: 1px #eee solid;
+	width: 450px;
+	padding-top: 120px;
+	padding-bottom: 120px; 
+}
+
+
+.member-find-result strong {
+	color: #ff0045;
+	font-size: 18px;
+	font-weight: 300; /* 폰트 얇이 (낮을수록 얇음) */
+	line-height: 35px; /* 글씨체 상하 간격 */
+}
+
+.member-find-result a {
+		color: #fff;
+}
+
+ .pBtn {
+ 	margin: auto;
+	margin-top: 30px;
+	height: 48px;
+	font-size: 16px;
+	line-height: 48px;
+	background-color: #2d2d2d;
+	text-align: center;
+	width: 320px;
+	font-weight: 300;
+	transition: background 0.2s ease-in-out;
+	color: #fff;
+}
+
+.pBtn:hover {
+	margin: auto;
+	margin-top: 30px;
+	height: 48px;
+	font-size: 16px;
+	line-height: 48px;
+	background-color: #ff0045;
+	text-align: center;
+	width: 320px;
+	font-weight: 300;
+	transition: background 0.2s ease-in-out;
+	color: #fff;
+} 
+

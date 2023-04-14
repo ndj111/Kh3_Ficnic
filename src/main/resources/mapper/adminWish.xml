@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 관리자 : 찜상품 관련 -->
+<mapper namespace="wishDAO">
+
+    <!-- 찜 목록 -->
+    <select id="adminWishList" resultType="wishDTO">
+    </select>
+
+	<!-- 회원이 가지고 있는 쿠폰 삭제 -->
+	<delete id="adminWishDelete" parameterType="int">
+		delete from member_wish where ficnic_no = #{ficnic_no }
+	</delete>
+
+
+
+
+
+</mapper>

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 관리자 : 예약 관련 -->
+<mapper namespace="reservDAO">
+
+    <!-- 예약 목록 총 갯수 -->
+    <select id="adminReservCount" parameterType="java.util.Map" resultType="int">
+        select count(*) from reserv_list where reserv_no > 0
+        <if test="search_status != ''"> and reserv_status = #{search_status}</if>
+        <if test="search_date_start != ''"> <![CDATA[and reserv_date > to_date(#{search_date_start})]]></if>
+        <if test="search_date_end != ''"> <![CDATA[and reserv_date < to_date(#{search_date_end})]]></if>
+        <if test="search_sess != ''"> and reserv_sess like '%' || #{search_sess} || '%'</if>
+        <if test="search_ficnic != ''"> and reserv_ficnic_name like '%' || #{search_ficnic} || '%'</if>
+        <if test="search_name != ''"> and reserv_name like '%' || #{search_name} || '%'</if>
+    </select>
+
+
+    <!-- 예약 목록 -->
+    <select id="adminReservList" resultType="reservDTO">
+            select * from(
+                select
+                    row_number() over(order by reserv_date desc) rnum,
+                    b.*
+                from (
+                    select * from reserv_list where reserv_no > 0
+			        <if test="search_status != ''"> and reserv_status = #{search_status}</if>
+			        <if test="search_date_start != ''"> <![CDATA[and reserv_date > to_date(#{search_date_start})]]></if>
+			        <if test="search_date_end != ''"> <![CDATA[and reserv_date < to_date(#{search_date_end})]]></if>
+			        <if test="search_sess != ''"> and reserv_sess like '%' || #{search_sess} || '%'</if>
+			        <if test="search_ficnic != ''"> and reserv_ficnic_name like '%' || #{search_ficnic} || '%'</if>
+			        <if test="search_name != ''"> and reserv_name like '%' || #{search_name} || '%'</if>
+                ) b
+            )
+        <![CDATA[
+            where rnum >= #{startNo} and rnum <= #{endNo}
+        ]]>
+    </select>
+
+
+
+	<!-- 예약 상세 내역 -->
+	<select id="adminReservView" parameterType="java.util.Map" resultType="reservDTO">
+		select * from reserv_list where reserv_no = #{reserv_no} and reserv_sess = #{reserv_sess}
+	</select>
+
+
+
+    <!-- 예약 상태 변경 -->
+    <update id="adminReservModifyStatus" parameterType="java.util.Map">
+        update reserv_list set reserv_status = #{reserv_status} where reserv_no = #{reserv_no} and reserv_sess = #{reserv_sess}
+    </update>
+
+
+
+    <!-- 예약 피크닉 날짜 변경 -->
+    <update id="adminReservModifyFicnicDate" parameterType="java.util.Map">
+        update reserv_list set reserv_ficnic_date = to_date(#{ficnic_date}) where reserv_no = #{reserv_no} and reserv_sess = #{reserv_sess}
+    </update>
+
+
+
+
+    <!-- 상단 - 최근 3일간 내역 가져오기 -->
+    <select id="adminRecentReservList" parameterType="String" resultType="reservDTO">
+        select * from reserv_list where
+        <![CDATA[reserv_no > 0 and rownum <= 9 and reserv_date >= to_date(#{value})]]>
+        and reserv_status = 'reserv'
+        order by reserv_date desc
+    </select>
+
+
+</mapper>

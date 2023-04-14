@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 관리자 : 게시판 관련 -->
+<mapper namespace="boardDAO">
+
+    <!-- 게시판 목록 -->
+    <select id="adminBoardList" resultType="boardDTO">
+    </select>
+
+
+
+
+
+
+</mapper>

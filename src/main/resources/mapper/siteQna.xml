@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 사이트 : 1:1문의 관련 -->
+<mapper namespace="qnaDAO">
+
+    <!-- 1:1 문의 목록 -->
+    <select id="siteQnaList" resultType="qnaDTO">
+   		select * from qna_list where member_id = #{member_id} order by qna_date desc
+    </select>
+
+
+	<!-- 문의글 수정 -->
+	<update id="siteQnaModifyOk" parameterType="qnaDTO">
+		update
+		qna_list set qna_cont = #{qna_cont}, qna_title = #{qna_title}, qna_file1 = #{qna_file1}, qna_file2 = #{qna_file2} where qna_no = #{qna_no}
+	</update>
+	
+	
+	
+	<!-- 문의글 추가 -->
+    <insert id="siteQnaWriteOk" parameterType="qnaDTO">
+        <selectKey resultType="int" keyProperty="qna_no" order="BEFORE">
+            select nvl(max(qna_no),0) from qna_list
+        </selectKey>
+        insert into qna_list values(#{qna_no} + 1, #{ficnic_no},
+        #{qna_title}, #{qna_cont}, #{qna_file1}, #{qna_file2},
+        #{member_id}, #{qna_pw}, #{qna_name}, sysdate)
+    </insert>
+
+    <!-- 문의글 이미지 삭제 -->
+    <update id="siteDeleteQnaImage" parameterType="java.util.Map">
+        update qna_list set qna_file${img_num} = null where qna_no = #{qna_no}
+    </update>
+
+
+
+</mapper>

@@ -1,0 +1,271 @@
+@charset "utf-8";
+
+
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400;500;700;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@100;200;300;400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&display=swap');
+
+
+
+
+:root {
+    --font-color: #ff005a;
+    --border-color: #ff0045;
+}
+
+
+
+/*************************/
+/* tag reset
+/*************************/
+html, body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, code, form, fieldset, legend, input, textarea, p, blockquote, th, td, img {
+    margin: 0;
+    padding: 0;
+}
+html {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+}
+body {
+    height: 100%;
+}
+body,
+code,
+pre {
+    font-size: 14px;
+    font-family: 'Noto Sans KR', '맑은 고딕', 'Malgun Gothic', 'verdana', '굴림', 'Gulim', 'AppleGothic', 'sans-serif';
+    color: #333;
+    margin: 0;
+    padding: 0;
+    letter-spacing: -0.5px;
+}
+ul,
+ol,
+dl,
+p,
+span,
+button {
+    margin: 0;
+    padding: 0;
+    border: 0 none;
+}
+li {
+    font-family: 'Noto Sans KR', '맑은 고딕', 'Malgun Gothic', 'verdana', '굴림', 'Gulim', 'AppleGothic', 'sans-serif';
+    list-style: none;
+    color: #333;
+}
+
+select,
+option,
+input,
+textarea {
+    font-size: 100%;
+    font-family: 'Noto Sans KR', '맑은 고딕', 'Malgun Gothic', 'verdana', '굴림', 'Gulim', 'AppleGothic', 'sans-serif';
+    color: #333;
+    vertical-align: middle;
+}
+
+
+img {
+    border: 0;
+    margin: 0;
+    padding: 0;
+}
+
+audio {
+    display: none;
+}
+
+
+a,
+a:link,
+a:active,
+a:visited {
+    font-size: 14px;
+    font-family: 'Noto Sans KR', '맑은 고딕', 'Malgun Gothic', 'verdana', '굴림', 'Gulim', 'AppleGothic', 'sans-serif';
+    text-decoration: none;
+    letter-spacing: -0.5px;
+}
+a:hover {
+    text-decoration: none !important;
+    color: var(--font-color);
+}
+*:focus {
+    outline: none !important;
+}
+
+
+a, button {
+    -webkit-transition: all 0.2s ease-out 0s;
+    -o-transition: all 0.2s ease-out 0s;
+    transition: all 0.2s ease-out 0s;
+}
+
+
+
+table {
+    border-spacing: 0;
+    border-collapse: collapse;
+}
+th,td {
+    margin: 0;
+    padding: 0;
+    vertical-align: middle;
+}
+table th img,
+table td img {
+    vertical-align: middle;
+}
+
+
+
+
+
+
+
+
+/*************************/
+/* float bugFix
+/*************************/
+.clear {
+    zoom: 1;
+}
+.clear:after {
+    content: "";
+    display: block;
+    clear: both;
+}
+
+
+
+/*************************/
+/* Etc
+/*************************/
+.displaynone {
+    display: none;
+}
+
+
+.form-control {
+    font-size: 14px !important;
+}
+
+
+.btn-group input[type="radio"] {
+    margin-top: -3px;
+}
+.form-control[type="file"] {
+    height: calc(1.5em + .75rem + 7px);
+    padding: .375rem .5rem;
+}
+
+
+
+
+
+
+
+/*************************/
+/* #preloader
+/*************************/
+#preloader {
+    position: fixed;
+    left: 0px;
+    top: 0px;
+    width: 100%;
+    height: 100%;
+    z-index: 9999;
+    background: #fff;
+}
+#preloader .loader {
+    position: absolute;
+    margin: auto;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    color: var(--font-color);
+    font-size: 50px;
+    text-indent: -9999em;
+    overflow: hidden;
+    width: 1em;
+    height: 1em;
+    border-radius: 50%;
+    -webkit-transform: translateZ(0);
+    -ms-transform: translateZ(0);
+    transform: translateZ(0);
+    -webkit-animation: preload 1s infinite ease, round 1s infinite ease;
+    animation: preload 1s infinite ease, round 1s infinite ease;
+}
+
+@-webkit-keyframes preload {
+    0% {
+        box-shadow: 0 -0.83em 0 -0.4em, 0 -0.83em 0 -0.42em, 0 -0.83em 0 -0.44em, 0 -0.83em 0 -0.46em, 0 -0.83em 0 -0.477em;
+    }
+    5%, 95% {
+        box-shadow: 0 -0.83em 0 -0.4em, 0 -0.83em 0 -0.42em, 0 -0.83em 0 -0.44em, 0 -0.83em 0 -0.46em, 0 -0.83em 0 -0.477em;
+    }
+    10%, 59% {
+        box-shadow: 0 -0.83em 0 -0.4em, -0.087em -0.825em 0 -0.42em, -0.173em -0.812em 0 -0.44em, -0.256em -0.789em 0 -0.46em, -0.297em -0.775em 0 -0.477em;
+    }
+    20% {
+        box-shadow: 0 -0.83em 0 -0.4em, -0.338em -0.758em 0 -0.42em, -0.555em -0.617em 0 -0.44em, -0.671em -0.488em 0 -0.46em, -0.749em -0.34em 0 -0.477em;
+    }
+    38% {
+        box-shadow: 0 -0.83em 0 -0.4em, -0.377em -0.74em 0 -0.42em, -0.645em -0.522em 0 -0.44em, -0.775em -0.297em 0 -0.46em, -0.82em -0.09em 0 -0.477em;
+    }
+    100% {
+        box-shadow: 0 -0.83em 0 -0.4em, 0 -0.83em 0 -0.42em, 0 -0.83em 0 -0.44em, 0 -0.83em 0 -0.46em, 0 -0.83em 0 -0.477em;
+    }
+}
+
+@keyframes preload {
+    0% {
+        box-shadow: 0 -0.83em 0 -0.4em, 0 -0.83em 0 -0.42em, 0 -0.83em 0 -0.44em, 0 -0.83em 0 -0.46em, 0 -0.83em 0 -0.477em;
+    }
+    5%, 95% {
+        box-shadow: 0 -0.83em 0 -0.4em, 0 -0.83em 0 -0.42em, 0 -0.83em 0 -0.44em, 0 -0.83em 0 -0.46em, 0 -0.83em 0 -0.477em;
+    }
+    10%, 59% {
+        box-shadow: 0 -0.83em 0 -0.4em, -0.087em -0.825em 0 -0.42em, -0.173em -0.812em 0 -0.44em, -0.256em -0.789em 0 -0.46em, -0.297em -0.775em 0 -0.477em;
+    }
+    20% {
+        box-shadow: 0 -0.83em 0 -0.4em, -0.338em -0.758em 0 -0.42em, -0.555em -0.617em 0 -0.44em, -0.671em -0.488em 0 -0.46em, -0.749em -0.34em 0 -0.477em;
+    }
+    38% {
+        box-shadow: 0 -0.83em 0 -0.4em, -0.377em -0.74em 0 -0.42em, -0.645em -0.522em 0 -0.44em, -0.775em -0.297em 0 -0.46em, -0.82em -0.09em 0 -0.477em;
+    }
+    100% {
+        box-shadow: 0 -0.83em 0 -0.4em, 0 -0.83em 0 -0.42em, 0 -0.83em 0 -0.44em, 0 -0.83em 0 -0.46em, 0 -0.83em 0 -0.477em;
+    }
+}
+@-webkit-keyframes round {
+    0% {
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+    100% {
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
+}
+@keyframes round {
+    0% {
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+    100% {
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
+}
+
+
+
+
+
+
+

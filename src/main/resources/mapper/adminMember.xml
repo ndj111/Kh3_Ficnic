@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 관리자 : 회원 관련 -->
+<mapper namespace="memberDAO">
+
+    <!-- 회원 목록 총 갯수 -->
+    <select id="adminMemberTotalCount" parameterType="java.util.Map" resultType="int">
+        select count(*) from member_list where member_no > 0
+        <if test="search_type != ''"> and member_type = #{search_type}</if>
+        <if test="search_name != ''"> and member_name like '%' || #{search_name} || '%'</if>
+        <if test="search_id != ''"> and member_id like '%' || #{search_id} || '%'</if>
+        <if test="search_email != ''"> and member_email like '%' || #{search_email} || '%'</if>
+        <if test="search_phone != ''"> and member_phone like '%' || #{search_phone} || '%'</if>
+    </select>
+
+
+	<!-- 회원 목록 -->
+	<select id="adminMemberList" resultType="memberDTO">
+            select * from(
+                select
+                    row_number() over(order by member_joindate desc) rnum,
+                    b.*
+                from (
+                    select * from member_list where member_no > 0
+                    <if test="search_type != ''"> and member_type = #{search_type}</if>
+                    <if test="search_name != ''"> and member_name like '%' || #{search_name} || '%'</if>
+                    <if test="search_id != ''"> and member_id like '%' || #{search_id} || '%'</if>
+                    <if test="search_email != ''"> and member_email like '%' || #{search_email} || '%'</if>
+                    <if test="search_phone != ''"> and member_phone like '%' || #{search_phone} || '%'</if>
+                ) b
+            )
+        <![CDATA[
+            where rnum >= #{startNo} and rnum <= #{endNo}
+        ]]>
+	</select>
+
+
+	<!-- 회원 상세 내역 -->
+	<select id="adminMemberCont" parameterType="int" resultType="memberDTO">
+		select * from member_list where member_no = #{member_no}
+	</select>
+
+
+	<!-- 회원 추가 -->
+    <insert id="adminMemberwriteOk" parameterType="memberDTO">
+        <selectKey resultType="int" keyProperty="member_no" order="BEFORE">
+            select nvl(max(member_no),0) from member_list
+        </selectKey>
+        insert into member_list values(#{member_no} + 1, #{member_type},
+        #{member_id}, #{member_pw}, #{member_name}, #{member_email},
+        #{member_phone}, 1000, sysdate)
+    </insert>
+
+
+	<!-- 회원 아이디 중복 체크 -->
+	<select id="checkId" resultType="int">
+		select count(*) from member_list where member_id = #{member_id}
+	</select>
+
+
+	<!-- 회원 삭제 -->
+	<delete id="adminMemberdelete" parameterType="int">
+		delete from member_list where member_no = #{member_no }
+	</delete>
+
+
+	<!-- 회원 삭제 후 글번호 재작업 -->
+	<update id="adminMemberSequence">
+		<![CDATA[update member_list set member_no = member_no - 1 where member_no > #{member_no}]]>
+	</update>
+
+
+	<!-- 회원 수정 -->
+	<update id="adminMemberModifyOk" parameterType="memberDTO">
+		update
+		member_list set member_type = #{member_type}, member_pw =
+		#{member_pw}, member_name = #{member_name}, member_email =
+		#{member_email}, member_phone = #{member_phone}, member_point =
+		#{member_point} where member_id = #{member_id}
+	</update>
+
+	<!-- 예약 상세내역 회원 정보  -->
+	<select id="adminReservMember" parameterType="String" resultType="memberDTO">
+		select * from member_list where member_id = #{member_id}
+	</select>
+
+
+
+
+    <!-- 상단 - 최근 3일간 내역 가져오기 -->
+    <select id="adminRecentMemberList" parameterType="String" resultType="memberDTO">
+        select * from member_list where
+        <![CDATA[member_no > 0 and rownum <= 9 and member_joindate >= to_date(#{value})]]>
+        and member_type = 'user'
+        order by member_joindate desc
+    </select>
+
+
+
+</mapper>

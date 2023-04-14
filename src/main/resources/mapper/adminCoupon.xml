@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 관리자 : 쿠폰 관련 -->
+<mapper namespace="couponDAO">
+
+    <!-- 쿠폰 목록 총 갯수 -->
+    <select id="adminCouponCount" parameterType="java.util.Map" resultType="int">
+        select count(*) from coupon_list where coupon_no > 0
+        <if test="search_type != ''"> and coupon_use_type = #{search_type}</if>
+        <if test="search_name != ''"> and coupon_name like '%' || #{search_name} || '%'</if>
+    </select>
+
+	<!-- 쿠폰 목록 -->
+	<select id="adminCouponList" resultType="couponDTO">
+            select * from(
+                select
+                    row_number() over(order by coupon_date desc) rnum,
+                    b.*
+                from (
+                    select * from coupon_list where coupon_no > 0
+                    <if test="search_type != ''"> and coupon_use_type = #{search_type}</if>
+                    <if test="search_name != ''"> and coupon_name like '%' || #{search_name} || '%'</if>
+                ) b
+            )
+        <![CDATA[
+            where rnum >= #{startNo} and rnum <= #{endNo}
+        ]]>
+	</select>
+
+	<!-- 쿠폰 보기 -->
+	<select id="adminCouponView" parameterType="int" resultType="couponDTO">
+		select * from coupon_list where coupon_no = #{coupon_no}
+	</select>
+
+	<!-- 쿠폰 삭제 -->
+	<delete id="adminCoupondelete" parameterType="int">
+		delete from coupon_list where coupon_no = #{coupon_no }
+	</delete>
+
+	<!-- 쿠폰 삭제 후 글번호 재작업 -->
+	<update id="adminCouponSequence">
+		<![CDATA[update coupon_list set coupon_no = coupon_no - 1 where coupon_no > #{coupon_no}]]>
+	</update>
+
+	<!-- 쿠폰 등록 -->
+	<insert id="adminCouponWriteOk" parameterType="couponDTO">
+		<selectKey resultType="int" keyProperty="coupon_no" order="BEFORE">
+			select nvl(max(coupon_no),0) from coupon_list
+		</selectKey>
+		insert into coupon_list values(#{coupon_no} + 1, #{coupon_name}, #{coupon_use_type},
+		#{coupon_use_value}, #{coupon_price}, #{coupon_price_type}, #{coupon_price_over},
+		#{coupon_price_max}, #{coupon_date_type}, #{coupon_date_value}, 
+		<if test="coupon_date_type.equals('free')">default, default</if>
+		<if test="coupon_date_type.equals('after')">default, default</if>
+		<if test="coupon_date_type.equals('date')">#{coupon_start_date}, TO_DATE(#{coupon_end_date}, 'YYYY/MM/DD HH24:MI:SS')</if>,
+		#{coupon_max_ea}, default, default, sysdate)
+	</insert>
+	
+	<!-- 쿠폰 수정 -->
+	<update id="adminCouponModifyOk" parameterType="couponDTO">
+		update
+		coupon_list set coupon_name = #{coupon_name}, coupon_use_type = #{coupon_use_type},
+		<if test="coupon_use_type.equals('cart')"> coupon_use_value = default,</if>
+		<if test="coupon_use_type.equals('category')"> coupon_use_value = #{coupon_use_value},</if>
+		<if test="coupon_use_type.equals('goods')"> coupon_use_value = #{coupon_use_value},</if>
+		coupon_price = #{coupon_price}, coupon_price_type = #{coupon_price_type},
+		coupon_price_over = #{coupon_price_over}, coupon_price_max = #{coupon_price_max},
+		coupon_date_type = #{coupon_date_type}, coupon_date_value = #{coupon_date_value},
+		<if test="coupon_date_type.equals('free')">coupon_start_date = default, coupon_end_date = default</if>
+		<if test="coupon_date_type.equals('after')">coupon_start_date = default, coupon_end_date = default</if>
+		<if test="coupon_date_type.equals('date')">coupon_start_date = #{coupon_start_date}, coupon_end_date = TO_DATE(#{coupon_end_date}, 'YYYY/MM/DD HH24:MI:SS')</if>
+		, coupon_max_ea = #{coupon_max_ea} where coupon_no = #{coupon_no}
+	</update>
+
+
+
+
+
+</mapper>

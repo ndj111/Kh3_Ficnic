@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 관리자 : 리뷰 관련 -->
+<mapper namespace="reviewDAO">
+
+    <!-- 리뷰 목록 총 갯수 -->
+    <select id="adminReviewCount" parameterType="java.util.Map" resultType="int">
+        select count(*) from review_list r join ficnic_list f on r.ficnic_no = f.ficnic_no where r.review_no > 0
+        <if test="search_ficnic != ''"> and f.ficnic_name like '%' || #{search_ficnic} || '%'</if>
+        <if test="search_review != ''"> and r.review_cont like '%' || #{search_review} || '%'</if>
+        <if test="search_writer != ''"> and (r.review_name like '%' || #{search_writer} || '%' or r.member_id like '%' || #{search_writer} || '%')</if>
+    </select>
+
+
+	<!-- 리뷰 목록 -->
+	<select id="adminReviewList" parameterType="java.util.Map" resultType="reviewDTO">
+            select * from(
+                select
+                    row_number() over(order by review_no desc) rnum,
+                    b.*
+                from (
+                    select * from review_list r join ficnic_list f on r.ficnic_no = f.ficnic_no where review_no > 0
+                    <if test="search_ficnic != ''"> and f.ficnic_name like '%' || #{search_ficnic} || '%'</if>
+                    <if test="search_review != ''"> and r.review_cont like '%' || #{search_review} || '%'</if>
+                    <if test="search_writer != ''"> and (r.review_name like '%' || #{search_writer} || '%' or r.member_id like '%' || #{search_writer} || '%')</if>
+                ) b
+            )
+        <![CDATA[
+            where rnum >= #{startNo} and rnum <= #{endNo}
+        ]]>
+	</select>
+
+
+	<select id="adminReviewView" parameterType="int" resultType="reviewDTO">
+		select * from review_list r join ficnic_list f on r.ficnic_no = f.ficnic_no where review_no = #{review_no}
+	</select>
+
+
+	<update id="adminReviewModify" parameterType="reviewDTO">
+		update review_list
+		set review_point = #{review_point}, review_photo1 = #{review_photo1},
+		review_photo2 = #{review_photo2}, review_cont = #{review_cont} where
+		review_no = #{review_no}
+	</update>
+
+
+	<delete id="adminReviewDelete" parameterType="int">
+		delete from review_list where review_no = #{review_no}
+	</delete>
+
+
+	<update id="adminReviewSeq">
+  		<![CDATA[update review_list set review_no = review_no - 1 where review_no > #{review_no}]]>
+	</update>
+	
+
+    <insert id="adminReviewWriteOk" parameterType="reviewDTO">
+        <selectKey resultType="int" keyProperty="review_no" order="BEFORE">
+            select nvl(max(review_no),0) from review_list
+        </selectKey>
+        insert into review_list values(#{review_no} + 1, #{ficnic_no},
+        #{review_point}, #{review_cont}, #{review_photo1}, #{review_photo2},
+        #{member_id}, #{review_pw}, #{review_name}, TO_DATE(#{review_date}, 'YYYY/MM/DD HH24:MI:SS'))
+    </insert>	
+	
+
+</mapper>

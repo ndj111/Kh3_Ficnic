@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 사이트 : 리뷰 관련 -->
+<mapper namespace="reviewDAO">
+
+    <!-- 리뷰 목록 -->
+    <select id="SiteMypageReviewList" parameterType="string" resultType="reviewDTO">
+    	select * from review_list where member_id = #{member_id}
+    </select>
+
+    <!-- 검색 페이징 개수  -->
+	<select id="siteReviewCount" parameterType="map" resultType="int">
+		select count(*) from review_list where review_no > 0
+		<if test="ficnic_no != ''">and ficnic_no = #{ficnic_no}</if>
+		<choose>
+			<when test="getType.equals('pointH')">order by review_point desc, review_photo1 asc </when>
+			<when test="getType.equals('pointL')">order by review_point asc, review_photo1 asc </when>
+		</choose>
+	</select>
+	
+	
+	<!-- 정렬 -->
+	<select id="SiteFicnicNumList" parameterType="map" resultType="reviewDTO">
+		select * from review_list where ficnic_no = #{ficnic_no} 
+		<if test="getType.equals('') or getType.equals('pointD')">order by review_date desc, review_photo1 asc</if> 
+		<choose>
+			<when test="getType.equals('pointH')">order by review_point desc, review_photo1 asc </when>
+			<when test="getType.equals('pointL')">order by review_point asc, review_photo1 asc </when>
+		</choose>
+	</select>
+	
+	
+	<!-- 정렬 -->
+	<select id="SiteFicnicThreeNumList" parameterType="map" resultType="reviewDTO">
+		    	select * from(
+	                select
+	                    row_number() over(order by ficnic_no desc) rnum,
+	                    b.*
+	                from (
+	                select * from review_list where ficnic_no > 0 and ficnic_no = #{ficnic_no} 
+		<if test="getType.equals('') or getType.equals('pointD')"> order by review_date desc, review_photo1 asc</if> 
+		<choose>
+			<when test="getType.equals('pointH')">order by review_point desc, review_date desc, review_photo1 asc </when>
+			<when test="getType.equals('pointL')">order by review_point asc, review_date desc, review_photo1 asc </when>
+		</choose>
+		 )b
+			)
+			<![CDATA[
+	            where rnum >= #{startNo} and rnum <= #{endNo}
+	        ]]>
+	</select>
+
+</mapper>

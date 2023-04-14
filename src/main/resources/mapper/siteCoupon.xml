@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 사이트 : 쿠폰 관련 -->
+<mapper namespace="couponDAO">
+
+
+    <!-- 다운로드 가능한 쿠폰 정보 가져오기 -->
+    <select id="siteDownloadAbleCoupon" resultType="couponDTO">
+        select * from coupon_list
+        where coupon_use_type != 'cart'
+        and (
+            (coupon_use_type = 'goods' and coupon_use_value like '%' || '★${fdto.ficnic_no}★' || '%')
+            or
+            (coupon_use_type = 'category'
+                and (
+                    coupon_use_value like '%' || '★${fdto.ficnic_category_no}★' || '%'
+                    or coupon_use_value like '%' || '★${fdto.ficnic_category_sub1}★' || '%'
+                    or coupon_use_value like '%' || '★${fdto.ficnic_category_sub2}★' || '%'
+                    or coupon_use_value like '%' || '★${fdto.ficnic_category_sub3}★' || '%'
+                )
+            )
+        )
+        <![CDATA[and rownum <= 1]]>
+        order by coupon_date desc
+    </select>
+
+
+
+    <!-- 쿠폰을 이미 가지고 있는지 체크 -->
+    <select id="siteCheckCouponHas" parameterType="java.util.Map" resultType="int">
+        select count(*) from member_mcoupon where coupon_no = #{coupon_no} and member_id = #{sess_id}
+    </select>
+
+
+    <!-- 쿠폰 발급하기 -->
+    <insert id="siteAddCoupon" parameterType="java.util.Map">
+        <selectKey resultType="int" keyProperty="mcoupon_no" order="BEFORE">
+           select nvl(max(mcoupon_no),0) from member_mcoupon
+        </selectKey>
+        insert into member_mcoupon values(
+            #{mcoupon_no} + 1,
+            #{coupon_no},
+            '',
+            #{member_id},
+            0,
+            to_date(#{mcoupon_start_date}, 'YYYY/MM/DD HH24:MI:SS'),
+            to_date(#{mcoupon_end_date}, 'YYYY/MM/DD HH24:MI:SS'),
+            '',
+            sysdate
+        )
+    </insert>
+
+
+    <!-- 쿠폰 발급 후 다운로드 횟수 증가 -->
+    <update id="siteUpdateAddCoupon">
+        update coupon_list set coupon_down_ea = coupon_down_ea + 1 where coupon_no = #{coupon_no}
+    </update>
+
+
+
+</mapper>

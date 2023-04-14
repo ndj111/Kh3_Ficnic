@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+	<settings>
+	
+	        <setting name="cacheEnabled" value="false" />
+	
+	        <setting name="jdbcTypeForNull" value="NULL" />
+	
+   </settings>
+    <typeAliases>
+
+        <!-- 피크닉 관련 -->
+        <typeAlias type="com.kh3.model.ficnic.FicnicDTO" alias="ficnicDTO" />
+        <typeAlias type="com.kh3.model.ficnic.FicnicDAO" alias="ficnicDAO" />
+        <typeAlias type="com.kh3.model.ficnic.CategoryDTO" alias="categoryDTO" />
+        <typeAlias type="com.kh3.model.ficnic.CategoryDAO" alias="categoryDAO" />
+
+        <!-- 예약 관련 -->
+        <typeAlias type="com.kh3.model.reserv.ReservDTO" alias="reservDTO" />
+        <typeAlias type="com.kh3.model.reserv.ReservDAO" alias="reservDAO" />
+
+        <!-- 회원 관련 -->
+        <typeAlias type="com.kh3.model.member.MemberDTO" alias="memberDTO" />
+        <typeAlias type="com.kh3.model.member.MemberDAO" alias="memberDAO" />
+        <typeAlias type="com.kh3.model.member.PointDTO" alias="pointDTO" />
+        <typeAlias type="com.kh3.model.member.PointDAO" alias="pointDAO" />
+        <typeAlias type="com.kh3.model.member.WishDTO" alias="wishDTO" />
+        <typeAlias type="com.kh3.model.member.WishDAO" alias="wishDAO" />
+        <typeAlias type="com.kh3.model.member.McouponDTO" alias="mcouponDTO" />
+        <typeAlias type="com.kh3.model.member.McouponDAO" alias="mcouponDAO" />
+
+        <!-- 쿠폰 관련 -->
+        <typeAlias type="com.kh3.model.coupon.CouponDTO" alias="couponDTO" />
+        <typeAlias type="com.kh3.model.coupon.CouponDAO" alias="couponDAO" />
+
+        <!-- 문의 관련 -->
+        <typeAlias type="com.kh3.model.qna.QnaDTO" alias="qnaDTO" />
+        <typeAlias type="com.kh3.model.qna.QnaDAO" alias="qnaDAO" />
+        <typeAlias type="com.kh3.model.qna.QnaCommentDTO" alias="qnacommentDTO" />
+        <typeAlias type="com.kh3.model.qna.QnaCommentDAO" alias="qnacommentDAO" />
+
+        <!-- 리뷰 관련 -->
+        <typeAlias type="com.kh3.model.review.ReviewDTO" alias="reviewDTO" />
+        <typeAlias type="com.kh3.model.review.ReviewDAO" alias="reviewDAO" />
+
+        <!-- 게시판 관련 -->
+        <typeAlias type="com.kh3.model.board.BoardConfDTO" alias="boardConfDTO" />
+        <typeAlias type="com.kh3.model.board.BoardConfDAO" alias="boardConfDAO" />
+        <typeAlias type="com.kh3.model.board.BoardCategoryDTO" alias="boardCategoryDTO" />
+        <typeAlias type="com.kh3.model.board.BoardCategoryDAO" alias="boardCategoryDAO" />
+        <typeAlias type="com.kh3.model.board.BoardCommentDTO" alias="boardCommentDTO" />
+        <typeAlias type="com.kh3.model.board.BoardCommentDAO" alias="boardCommentDAO" />
+        <typeAlias type="com.kh3.model.board.BoardDTO" alias="boardDTO" />
+        <typeAlias type="com.kh3.model.board.BoardDAO" alias="boardDAO" />
+
+    </typeAliases>
+</configuration>

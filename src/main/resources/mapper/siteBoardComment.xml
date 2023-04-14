@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 사이트 : 댓글 관련 -->
+<mapper namespace="boardCmmentDAO">
+
+	<!-- 해당 게시판 > 해당 게시글의 댓글 리스트 출력 -->
+    <resultMap id="siteBoardCommentListMap" type="boardCommentDTO">
+        <result property="bcomm_id" column="bcomm_id" />
+        <collection property="bcomm_type" column="bcomm_id" select="siteBoardCommentListType" javaType="String" ofType="String" />
+    </resultMap>
+     
+    <select id="siteBoardCommentList" parameterType="map" resultMap="siteBoardCommentListMap">
+        select * from board_comment_${bbs_id} where bdata_no = #{bdata_no} order by bcomm_date asc
+    </select>
+    <select id="siteBoardCommentListType" resultType="String">
+        select member_type from member_list where member_id = #{bcomm_id}
+    </select>
+
+
+
+	<!-- 해당 게시판 > 해당 게시글의 댓글 삭제 -->
+	<delete id="SiteBoardCommDelete" parameterType="map">
+		delete from board_comment_${bbs_id} where bcomm_no = #{bcomm_no}
+	</delete>
+
+
+	<!-- 해당 게시판 > 해당 게시글 댓글 삭제 후 번호 업데이트 -->
+	<update id="SiteBoardCommNoUpdate" parameterType="map">
+		update board_comment_${bbs_id} set bcomm_no=bcomm_no-1 where bcomm_no>#{bcomm_no} 
+	</update>
+	
+	
+	<!-- 해당 게시판 > 해당 게시글의 댓글 작성 -->
+	<insert id="SiteBoardCommentInsert" parameterType="map">
+		
+	   <selectKey resultType="int" keyProperty="dto.bcomm_no" order="BEFORE">
+           select nvl(max(bcomm_no),0) from board_comment_${bbs_id}
+       </selectKey>
+       
+       insert into board_comment_${bbs_id} values(#{dto.bcomm_no}+1,#{dto.bdata_no},#{dto.bcomm_id},#{dto.bcomm_pw},#{dto.bcomm_name},#{dto.bcomm_cont},sysdate)
+	</insert>
+	
+	<update id="SiteBoardCommentCount" parameterType="map">
+		
+		update board_data_${bbs_id} set bdata_comment=bdata_comment+#{upDown} where bdata_no = #{bdata_no}
+	</update>
+
+	<!-- 해당 게시판 > 해당 게시글의 댓글 모두 삭제 -->
+	<delete id="SiteBoardCommDelList" parameterType="map">
+		delete from board_comment_${bbs_id} where bdata_no = #{bdata_no}
+	</delete>
+
+
+    <!-- 해당 게시판 > 방금 자신이 등록한 댓글 내용 가져오기 -->
+    <resultMap id="siteBoardCommentLastMap" type="boardCommentDTO">
+        <result property="bcomm_id" column="bcomm_id" />
+        <collection property="bcomm_type" column="bcomm_id" select="siteBoardCommentLastType" javaType="String" ofType="String" />
+    </resultMap>
+     
+    <select id="SiteBoardCommentLast" parameterType="map" resultMap="siteBoardCommentLastMap">
+        select * from board_comment_${bbs_id} where bdata_no = #{bdata_no} and bcomm_name = #{bcomm_name} and rownum = 1 order by bcomm_no desc
+    </select>
+    <select id="siteBoardCommentLastType" resultType="String">
+        select member_type from member_list where member_id = #{bcomm_id}
+    </select>
+
+
+    <!-- 해당 게시판 > 지정한 댓글 내용 가져오기 -->
+    <resultMap id="siteBoardCommentThisMap" type="boardCommentDTO">
+        <result property="bcomm_id" column="bcomm_id" />
+        <collection property="bcomm_type" column="bcomm_id" select="siteBoardCommentThisType" javaType="String" ofType="String" />
+    </resultMap>
+     
+    <select id="SiteBoardCommentThis" parameterType="map" resultMap="siteBoardCommentThisMap">
+        select * from board_comment_${bbs_id} where bdata_no = #{bdata_no} and bcomm_no = #{bcomm_no}
+    </select>
+    <select id="siteBoardCommentThisType" resultType="String">
+        select member_type from member_list where member_id = #{bcomm_id}
+    </select>
+
+
+
+</mapper>

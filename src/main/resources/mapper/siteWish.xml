@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 사이트 : 찜상품 관련 -->
+<mapper namespace="wishDAO">
+
+    <!-- 찜 목록 -->
+	<resultMap type="wishDTO" id="wishficnic">
+		<result property="ficnic_no" column="ficnic_no"/>
+		<collection property="ficnic_cont" column="ficnic_no" select="wishFicnicInfo" ofType="ficnicDTO" />
+	</resultMap>
+
+    <select id="siteWishList" parameterType="string" resultMap="wishficnic">
+    	select * from member_wish where member_id = #{value}
+    </select>
+    
+    <select id="wishFicnicInfo" resultType="ficnicDTO">
+    	select * from ficnic_list where ficnic_no = #{ficnic_no}
+    </select>
+
+
+    <!-- 찜 체크 -->
+    <select id="siteWishCheck" parameterType="java.util.Map" resultType="int">
+        select count(*) from member_wish where ficnic_no = #{ficnic_no} and member_id = #{sess_id}
+    </select>
+
+
+    <!-- 위시리스트 등록 -->
+    <insert id="siteWishAdd" parameterType="java.util.Map">
+        <selectKey resultType="int" keyProperty="wish_no" order="BEFORE">
+            select nvl(max(wish_no),0) from member_wish
+        </selectKey>
+        insert into member_wish values(#{wish_no} + 1, #{ficnic_no}, #{sess_id}, sysdate)
+    </insert>
+
+
+    <!-- 위시리스트 삭제 -->
+    <insert id="siteWishDel" parameterType="java.util.Map">
+        delete from member_wish where ficnic_no = #{ficnic_no} and member_id = #{sess_id}
+    </insert>
+
+
+
+
+
+
+    <!-- 찜 삭제 -->
+    <delete id="siteWishCancel" parameterType="map">
+        delete from member_wish where member_id = #{sess_id} and ficnic_no= #{ficnic_no}
+    </delete>
+</mapper>

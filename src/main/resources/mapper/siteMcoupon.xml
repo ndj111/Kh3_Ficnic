@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 사이트 : 회원보유 쿠폰 관련 -->
+<mapper namespace="mcouponDAO">
+
+	<resultMap type="mcouponDTO" id="mcouponListMap">
+		<result property="coupon_no" column="coupon_no"/>
+		<collection property="coupon_list" column="coupon_no" select="mypageMcouponList" ofType="couponDTO"  javaType="java.util.ArrayList"/>
+	</resultMap>
+
+
+    <!-- 보유 쿠폰 목록 -->
+    <select id="siteMcouponList" parameterType="string" resultMap="mcouponListMap">
+    	select * from member_mcoupon where member_id=#{value}
+    </select>
+
+
+    <select id="mypageMcouponList" resultType="couponDTO">
+    	select * from coupon_list 
+    </select>
+    
+    <delete id="siteMemberCouponDelete" parameterType="map">
+		delete member_mcoupon where coupon_no = #{coupon_no} and member_id = #{sess_id}
+	</delete>
+	
+	<select id="siteMemberCouponNum" parameterType="map" resultType="mcouponDTO">
+		select * from member_mcoupon where coupon_no = #{coupon_no} and member_id = #{sess_id}
+	</select>
+	
+	<update id="siteMCouponNumUpdate" parameterType="int">
+		update member_mcoupon set mcoupon_no=mcoupon_no-1 where mcoupon_no > #{coupon_no}
+	</update>
+    
+
+	<update id="reviewMileageUpdate" parameterType="map">
+		update member_list set member_point = member_point + #{mileage} where member_id = #{sess_id}
+	</update>
+
+
+
+
+</mapper>
