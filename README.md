@@ -12,8 +12,13 @@
 
 - 프렌드(Friend) + 피크닉(Picnic)의 합성어
 
-- 단조로운 여가 활동 패턴에서 벗어나, 다채로운 여가 생활을 즐길 수 있도록 제작  
+- 단조로운 여가 활동 패턴에서 벗어나, 다채로운 여가 생활을 즐길 수 있도록 제작
 
+<br/>
+
+※ 모든 이미지와 내용의 저작권은 탈잉[:link:](https://taling.me)과 FRIP[:link:](https://www.frip.co.kr/)에 있습니다.
+
+<br/>
 <br/>
 
 ## :yellow_circle: Environment
